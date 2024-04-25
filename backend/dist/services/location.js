@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoordinates = void 0;
 const coordinates_schema_1 = require("../models/coordinates-schema");
 const webError_1 = require("../utils/webError");
-const API_KEY = process.env.API_KEY || "5772d8c327100a7fd94c08a3add3606e";
+const API_KEY = process.env.API_KEY;
 const buildCityEndpoint = (cityName, stateCode, countryCode, limit) => {
     // Construct the base endpoint
     let endPoint = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}`;
