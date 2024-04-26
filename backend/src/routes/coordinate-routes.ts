@@ -1,35 +1,20 @@
 import { Router, Request, Response, NextFunction } from "express";
 import {
-  getCurrentWeather,
-  getHourlyWeather,
-  getDailyWeather,
-} from "../services/weatherFunctions"; // Import your weather functions
-import { weatherFunctionHandler } from "../controllers/weather-controller"; // Import the generic weather function handler
+  getCurrentWeatherHandler,
+  getHourlyWeatherHandler,
+  getDailyWeatherHandler,
+} from "../controllers/weatherController";
+import { weatherFunctionHandler } from "../controllers/weatherFunctionHandler"; // Import the generic weather function handler
 
 const weatherRouter = Router();
 
 // Route for current weather
-weatherRouter.get(
-  "/current",
-  async (req: Request, res: Response, next: NextFunction) => {
-    await weatherFunctionHandler(req, res, next, getCurrentWeather);
-  }
-);
+weatherRouter.get("/current", getCurrentWeatherHandler);
 
 // Route for hourly weather
-weatherRouter.get(
-  "/hourly",
-  async (req: Request, res: Response, next: NextFunction) => {
-    await weatherFunctionHandler(req, res, next, getHourlyWeather);
-  }
-);
+weatherRouter.get("/hourly", getHourlyWeatherHandler);
 
 // Route for daily weather
-weatherRouter.get(
-  "/daily",
-  async (req: Request, res: Response, next: NextFunction) => {
-    await weatherFunctionHandler(req, res, next, getDailyWeather);
-  }
-);
+weatherRouter.get("/daily", getDailyWeatherHandler);
 
 export { weatherRouter };
