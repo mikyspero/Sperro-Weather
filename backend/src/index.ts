@@ -1,17 +1,16 @@
-import express, { Request, Response,NextFunction } from "express";
+import express from "express";
 import { weatherRouter } from "./routes/coordinate-routes";
 import { errorHandler } from "./middlewares/error-handling";
 import { dailyRateLimit, minuteRateLimit } from "./middlewares/limiters";
-//import { checkCoordinates } from "./middlewares/typechecking";
-import { newError } from "./utils/webError";
-import { coordinatesSchema } from "./models/coordinates-schema";
-import { Coordinates } from "./types/coordinates";
 import { checkCoordinates } from "./middlewares/typechecking";
 
-
+import dotenv from "dotenv"; // Import dotenv
+dotenv.config({ path: __dirname + "/.env" });
+// Load environment variables from .env file
+const port = process.env.PORT; // Use the PORT environment variable
+console.log(process.env); // Check all loaded environment variables
 
 const app = express();
-const port = 3000;
 
 app.use(express.json());
 app.use(minuteRateLimit);
