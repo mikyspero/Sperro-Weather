@@ -7,12 +7,14 @@ const express_1 = __importDefault(require("express"));
 const coordinate_routes_1 = require("./routes/coordinate-routes");
 const error_handling_1 = require("./middlewares/error-handling");
 const limiters_1 = require("./middlewares/limiters");
+const typechecking_1 = require("./middlewares/typechecking");
 const app = (0, express_1.default)();
 const port = 3000;
 app.use(express_1.default.json());
 app.use(limiters_1.minuteRateLimit);
 app.use(limiters_1.dailyRateLimit);
-app.use('/weather', coordinate_routes_1.weatherRouter);
+app.use(typechecking_1.checkCoordinates);
+app.use("/weather", coordinate_routes_1.weatherRouter);
 app.use(error_handling_1.errorHandler);
 app.listen(port, () => {
     console.log(`listening on port ${port}`);

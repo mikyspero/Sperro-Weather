@@ -24,5 +24,4 @@ const weatherFunctionHandler = async (
     next(error) // Pass any error to the error handling middleware
   }
 }
-
 export { weatherFunctionHandler }

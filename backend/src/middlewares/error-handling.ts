@@ -1,12 +1,20 @@
-import { Request, Response } from "express"
-import { WebError } from "../utils/webError"
+import { Request, Response } from "express";
+import { WebError } from "../utils/webError";
 
-const errorHandler = (error: WebError, req: Request, res: Response): void => {
-  // Send an appropriate error response to the client
-  console.log("There has been an error:", error);
-  res
-    .status(error.status || 500)
-    .send(error.message || "Internal Server Error");
-}
+const errorHandler = (err: any, req: Request, res: Response) => {
+  if (err instanceof WebError) {
+    // Handle known WebError types
+    const statusCode = err.status || 500; // Default to 500 Internal Server Error if statusCode is not set
+    const message = err.message || "Internal Server Error";
+
+    return res.status(statusCode).json({ error: message });
+  }
+  // Handle other types of errors (unexpected errors)
+  console.error("Unhandled error:", err);
+  // Set a generic error response
+  const statusCode = err.statusCode || 500;
+  const message = "Internal Server Error";
+  return res.status(statusCode).json({ error: message });
+};
 
 export { errorHandler };

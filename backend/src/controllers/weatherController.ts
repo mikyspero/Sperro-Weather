@@ -30,4 +30,4 @@ const getDailyWeatherHandler = async (
   await weatherFunctionHandler(req, res, next, getDailyWeather);
 };
 
-export { getCurrentWeather, getHourlyWeather, getDailyWeatherHandler };
+export { getCurrentWeatherHandler, getHourlyWeatherHandler, getDailyWeatherHandler };

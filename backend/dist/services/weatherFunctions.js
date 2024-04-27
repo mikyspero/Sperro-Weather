@@ -13,7 +13,7 @@ exports.getDailyWeather = exports.getHourlyWeather = exports.getCurrentWeather =
 const webError_1 = require("../utils/webError");
 const time_utils_1 = require("../utils/time-utils");
 const weather_schemas_1 = require("../models/weather-schemas");
-const API_KEY = process.env.API_KEY;
+const API_KEY = "5772d8c327100a7fd94c08a3add3606e" || process.env.API_KEY;
 const API_ROOT = `https://api.openweathermap.org/`;
 const isValidRawWeatherObject = (toBeChecked) => {
     return weather_schemas_1.RawWeatherObjectSchema.safeParse(toBeChecked).success;

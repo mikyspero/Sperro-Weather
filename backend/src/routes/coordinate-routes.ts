@@ -1,13 +1,13 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import {
   getCurrentWeatherHandler,
   getHourlyWeatherHandler,
   getDailyWeatherHandler,
 } from "../controllers/weatherController";
-import { weatherFunctionHandler } from "../controllers/weatherFunctionHandler"; // Import the generic weather function handler
-
+import { checkCoordinates } from "../middlewares/typechecking";
 const weatherRouter = Router();
-
+//mount middleware for coordinates validation
+weatherRouter.use(checkCoordinates);
 // Route for current weather
 weatherRouter.get("/current", getCurrentWeatherHandler);
 
