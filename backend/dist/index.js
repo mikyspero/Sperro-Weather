@@ -15,6 +15,7 @@ dotenv_1.default.config({ path: __dirname + "/.env" });
 const port = process.env.PORT; // Use the PORT environment variable
 //console.log(process.env); // Check all loaded environment variables
 const app = (0, express_1.default)();
+app.disable('x-powered-by');
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({ methods: ["GET"] }));
 app.use(limiters_1.minuteRateLimit);

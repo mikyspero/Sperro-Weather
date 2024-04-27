@@ -12,7 +12,7 @@ const port = process.env.PORT; // Use the PORT environment variable
 //console.log(process.env); // Check all loaded environment variables
 
 const app = express();
-
+app.disable('x-powered-by')
 app.use(express.json());
 app.use(cors({ methods: ["GET"] }));
 
