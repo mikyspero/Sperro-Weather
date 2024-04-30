@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDailyWeather = exports.getHourlyWeather = exports.getCurrentWeather = void 0;
 const webError_1 = require("../utils/webError");
-const time_utils_1 = require("../utils/time-utils");
 const weather_schemas_1 = require("../models/weather-schemas");
 const API_KEY = "5772d8c327100a7fd94c08a3add3606e" || process.env.API_KEY;
 const API_ROOT = `https://api.openweathermap.org/`;
@@ -106,16 +105,16 @@ const buildPeriodicWeatherArray = (rawWeatherData) => __awaiter(void 0, void 0, 
         };
     });
 });
-const groupWeatherByDays = (forecastData) => {
+const groupWeatherByDays = (// need a decent way to work with datas
+forecastData) => {
+    if (forecastData.length === 0) {
+        return [];
+    }
+    const firstDate = forecastData[0].date;
     return forecastData.reduce((daysArray, element) => {
-        //study reduce
-        // Calculate the difference in days from the first day
-        const monthOffset = element.date.getMonth !== forecastData[0].date.getMonth
-            ? (0, time_utils_1.getMonthOffset)(element.date)
-            : 0;
-        const dayIndex = element.date.getDate() - forecastData[0].date.getDate() + monthOffset;
-        daysArray[dayIndex] = daysArray[dayIndex] || []; // Initialize sub-array if it doesn't exist
-        daysArray[dayIndex].push(element); // Push data into the sub-array corresponding to the day
+        const dateDifference = Math.floor((element.date.getTime() - firstDate.getTime()) / (1000 * 3600 * 24));
+        daysArray[dateDifference] = daysArray[dateDifference] || [];
+        daysArray[dateDifference].push(element);
         return daysArray;
     }, []);
 };

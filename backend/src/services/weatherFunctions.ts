@@ -121,21 +121,24 @@ const buildPeriodicWeatherArray = async (
   });
 };
 
-const groupWeatherByDays = (
+const groupWeatherByDays = (// need a decent way to work with datas
   forecastData: WeatherObject[]
 ): WeatherObject[][] => {
+  if (forecastData.length === 0) {
+    return [];
+  }
+
+  const firstDate = forecastData[0].date;
+
   return forecastData.reduce(
     (daysArray: WeatherObject[][], element: WeatherObject) => {
-      //study reduce
-      // Calculate the difference in days from the first day
-      const monthOffset =
-        element.date.getMonth !== forecastData[0].date.getMonth
-          ? getMonthOffset(element.date)
-          : 0;
-      const dayIndex =
-        element.date.getDate() - forecastData[0].date.getDate() + monthOffset;
-      daysArray[dayIndex] = daysArray[dayIndex] || []; // Initialize sub-array if it doesn't exist
-      daysArray[dayIndex].push(element); // Push data into the sub-array corresponding to the day
+      const dateDifference = Math.floor(
+        (element.date.getTime() - firstDate.getTime()) / (1000 * 3600 * 24)
+      );
+
+      daysArray[dateDifference] = daysArray[dateDifference] || [];
+      daysArray[dateDifference].push(element);
+
       return daysArray;
     },
     []
