@@ -1,7 +1,7 @@
 import { Coordinates } from "../types/coordinates";
 import { coordinatesSchema } from "../models/coordinates-schema";
 import { newError } from "../utils/webError";
-const API_KEY = process.env.API_KEY;
+const API_KEY = "5772d8c327100a7fd94c08a3add3606e";
 
 const buildCityEndpoint = (
   cityName: string,
