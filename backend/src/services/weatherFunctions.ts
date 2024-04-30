@@ -132,8 +132,9 @@ const groupWeatherByDays = (// need a decent way to work with datas
 
   return forecastData.reduce(
     (daysArray: WeatherObject[][], element: WeatherObject) => {
+      const dayInSeconds = 1000 * 3600 * 24;
       const dateDifference = Math.floor(
-        (element.date.getTime() - firstDate.getTime()) / (1000 * 3600 * 24)
+        (element.date.getTime() - firstDate.getTime()) / (dayInSeconds)
       );
 
       daysArray[dateDifference] = daysArray[dateDifference] || [];
