@@ -4,9 +4,10 @@ import {
   getCurrentWeatherHandlerByCity,
   getHourlyWeatherHandlerByCity,
 } from "../controllers/cityController";
+import { checkCity} from "../middlewares/typechecking";
 
 const cityRouter = Router();
-
+cityRouter.use(checkCity);
 //mount middleware for coordinates validation
 // Route for current weather
 cityRouter.get("/current", getCurrentWeatherHandlerByCity);

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkCoordinates = void 0;
+exports.checkCity = exports.checkCoordinates = void 0;
 const webError_1 = require("../utils/webError");
 const coordinates_schema_1 = require("../models/coordinates-schema");
 const checkCoordinates = (req, res, next) => {
@@ -25,3 +25,12 @@ const checkCoordinates = (req, res, next) => {
     next(); // Proceed to the next middleware or route handler
 };
 exports.checkCoordinates = checkCoordinates;
+const checkCity = (req, res, next) => {
+    const city = req.query.city_name;
+    // Check if city is provided
+    if (!city) {
+        return next((0, webError_1.newError)("City is required", 400));
+    }
+    next(); // Proceed to the next middleware or route handler
+};
+exports.checkCity = checkCity;

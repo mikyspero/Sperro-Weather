@@ -112,7 +112,8 @@ forecastData) => {
     }
     const firstDate = forecastData[0].date;
     return forecastData.reduce((daysArray, element) => {
-        const dateDifference = Math.floor((element.date.getTime() - firstDate.getTime()) / (1000 * 3600 * 24));
+        const dayInSeconds = 1000 * 3600 * 24;
+        const dateDifference = Math.floor((element.date.getTime() - firstDate.getTime()) / (dayInSeconds));
         daysArray[dateDifference] = daysArray[dateDifference] || [];
         daysArray[dateDifference].push(element);
         return daysArray;

@@ -35,4 +35,17 @@ const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
   next(); // Proceed to the next middleware or route handler
 };
 
-export { checkCoordinates };
+const checkCity = (req: Request, res: Response, next: NextFunction) => {
+  const city: string | undefined = req.query.city_name as string | undefined;
+
+  // Check if city is provided
+  if (!city) {
+    return next(newError("City is required", 400));
+  }
+
+  next(); // Proceed to the next middleware or route handler
+};
+
+
+
+export { checkCoordinates,checkCity };
