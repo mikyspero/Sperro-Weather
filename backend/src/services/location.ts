@@ -94,4 +94,3 @@ const getCoordinates = async (
 
 // Export the main function to retrieve validated coordinates
 export { getCoordinates };
-

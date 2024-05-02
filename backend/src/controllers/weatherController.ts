@@ -6,6 +6,7 @@ import {
 } from "../services/weatherFunctions";
 import { Request, Response, NextFunction } from "express";
 
+// Route handler for getting weather forecasts based by coordinates
 const getCurrentWeatherHandler = async (
   req: Request,
   res: Response,
@@ -30,4 +31,8 @@ const getDailyWeatherHandler = async (
   await weatherFunctionHandler(req, res, next, getDailyWeather);
 };
 
-export { getCurrentWeatherHandler, getHourlyWeatherHandler, getDailyWeatherHandler };
+export {
+  getCurrentWeatherHandler,
+  getHourlyWeatherHandler,
+  getDailyWeatherHandler,
+};

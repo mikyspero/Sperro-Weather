@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isLeapYear = exports.getMonth = exports.getMonthOffset = void 0;
+exports.day = exports.isLeapYear = exports.getMonth = exports.getMonthOffset = void 0;
 const webError_1 = require("./webError");
 const isLeapYear = (year) => {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -48,3 +48,4 @@ const getMonthOffset = (date) => {
 };
 exports.getMonthOffset = getMonthOffset;
 const day = 1000 * 3600 * 24;
+exports.day = day;
