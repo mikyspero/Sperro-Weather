@@ -1,7 +1,6 @@
 import { RawWeatherObject } from "../types/raw-weather-object";
 import { WeatherObject } from "../types/weather-object";
 import { newError, WebError } from "../utils/webError";
-import { isLeapYear, getMonth, getMonthOffset } from "../utils/time-utils";
 import { RawWeatherObjectSchema } from "../models/weather-schemas";
 
 const API_KEY = "5772d8c327100a7fd94c08a3add3606e" || process.env.API_KEY;
@@ -11,9 +10,9 @@ const isValidRawWeatherObject = (toBeChecked: RawWeatherObject): boolean => {
   return RawWeatherObjectSchema.safeParse(toBeChecked).success;
 };
 
-const findMostFrequentWeatherType2 = (
-  weatherArray: WeatherObject[]
-): string => {
+//a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
+//since the array on which it operates is rather small
+const findMostFrequentWeatherType = (weatherArray: WeatherObject[]): string => {
   // Count occurrences of each weather type using reduce
   const weatherCount = weatherArray.reduce(
     (countMap: { [key: string]: number }, weatherObj) => {
@@ -23,16 +22,23 @@ const findMostFrequentWeatherType2 = (
     },
     {}
   );
+  // Check if weatherCount is empty
+  if (Object.keys(weatherCount).length === 0) {
+    return "";
+  }
+  // Initialize mostLikely with the first weather type
+  const firstWeatherType = Object.keys(weatherCount)[0];
   return Object.keys(weatherCount).reduce(
     (mostLikely: string, weatherType: string) => {
       return weatherCount[mostLikely] < weatherCount[weatherType]
         ? weatherType
         : mostLikely;
     },
-    ""
+    firstWeatherType
   );
 };
-const findMostFrequentWeatherType = (subarray: WeatherObject[]) => {
+const findMostFrequentWeatherTypeOriginal = (subarray: WeatherObject[]) => {
+  //slightly more efficient version of the above function
   const weatherCount: { [key: string]: number } = {};
 
   // Count occurrences of each weather type
@@ -54,19 +60,20 @@ const findMostFrequentWeatherType = (subarray: WeatherObject[]) => {
   return mostFrequentWeather;
 };
 
-const getMaxTemperature = (dailyWeather: WeatherObject[]) => {
-  return Math.max(...dailyWeather.map((element) => element.temperature.max));
-};
+const getMaxTemperature = (dailyWeather: WeatherObject[]) =>
+  Math.max(...dailyWeather.map((element) => element.temperature.max));
 
-const getMinTemperature = (dailyWeather: WeatherObject[]) => {
-  return Math.min(...dailyWeather.map((element) => element.temperature.min));
-};
+const getMinTemperature = (dailyWeather: WeatherObject[]) =>
+  Math.min(...dailyWeather.map((element) => element.temperature.min));
+
+const getEndpoint = (latitude: number, longitude: number) =>
+  `${API_ROOT}data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
 
 const fetchPeriodicWeather = async (
   latitude: number,
   longitude: number
 ): Promise<RawWeatherObject[]> => {
-  const endPoint = `${API_ROOT}data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
+  const endPoint = getEndpoint(latitude, longitude);
   const response = await fetch(endPoint); // Send request to Weather API
   if (!response.ok) {
     throw newError("Failed to fetch weather data", 500);
@@ -91,9 +98,9 @@ const isValidWeatherData = (rawWeatherData: RawWeatherObject) => {
   return rawWeatherData;
 };
 
-const buildPeriodicWeatherArray = async (
+const buildPeriodicWeatherArray = (
   rawWeatherData: RawWeatherObject[]
-): Promise<WeatherObject[]> => {
+): WeatherObject[] => {
   return rawWeatherData.map((rawWeatherObject: RawWeatherObject) => {
     const date = new Date(rawWeatherObject.dt * 1000); // Convert UNIX timestamp to Date object
 

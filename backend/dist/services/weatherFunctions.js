@@ -17,20 +17,29 @@ const API_ROOT = `https://api.openweathermap.org/`;
 const isValidRawWeatherObject = (toBeChecked) => {
     return weather_schemas_1.RawWeatherObjectSchema.safeParse(toBeChecked).success;
 };
-const findMostFrequentWeatherType2 = (weatherArray) => {
+//a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
+//since the array on which it operates is rather small
+const findMostFrequentWeatherType = (weatherArray) => {
     // Count occurrences of each weather type using reduce
     const weatherCount = weatherArray.reduce((countMap, weatherObj) => {
         const mainWeather = weatherObj.weather.main;
         countMap[mainWeather] = (countMap[mainWeather] || 0) + 1;
         return countMap;
     }, {});
+    // Check if weatherCount is empty
+    if (Object.keys(weatherCount).length === 0) {
+        return "";
+    }
+    // Initialize mostLikely with the first weather type
+    const firstWeatherType = Object.keys(weatherCount)[0];
     return Object.keys(weatherCount).reduce((mostLikely, weatherType) => {
         return weatherCount[mostLikely] < weatherCount[weatherType]
             ? weatherType
             : mostLikely;
-    }, "");
+    }, firstWeatherType);
 };
-const findMostFrequentWeatherType = (subarray) => {
+const findMostFrequentWeatherTypeOriginal = (subarray) => {
+    //slightly more efficient version of the above function
     const weatherCount = {};
     // Count occurrences of each weather type
     subarray.forEach((weatherObj) => {
@@ -48,14 +57,11 @@ const findMostFrequentWeatherType = (subarray) => {
     }
     return mostFrequentWeather;
 };
-const getMaxTemperature = (dailyWeather) => {
-    return Math.max(...dailyWeather.map((element) => element.temperature.max));
-};
-const getMinTemperature = (dailyWeather) => {
-    return Math.min(...dailyWeather.map((element) => element.temperature.min));
-};
+const getMaxTemperature = (dailyWeather) => Math.max(...dailyWeather.map((element) => element.temperature.max));
+const getMinTemperature = (dailyWeather) => Math.min(...dailyWeather.map((element) => element.temperature.min));
+const getEndpoint = (latitude, longitude) => `${API_ROOT}data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
 const fetchPeriodicWeather = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
-    const endPoint = `${API_ROOT}data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
+    const endPoint = getEndpoint(latitude, longitude);
     const response = yield fetch(endPoint); // Send request to Weather API
     if (!response.ok) {
         throw (0, webError_1.newError)("Failed to fetch weather data", 500);
@@ -78,7 +84,7 @@ const isValidWeatherData = (rawWeatherData) => {
     }
     return rawWeatherData;
 };
-const buildPeriodicWeatherArray = (rawWeatherData) => __awaiter(void 0, void 0, void 0, function* () {
+const buildPeriodicWeatherArray = (rawWeatherData) => {
     return rawWeatherData.map((rawWeatherObject) => {
         var _a, _b;
         const date = new Date(rawWeatherObject.dt * 1000); // Convert UNIX timestamp to Date object
@@ -101,7 +107,7 @@ const buildPeriodicWeatherArray = (rawWeatherData) => __awaiter(void 0, void 0, 
             },
         };
     });
-});
+};
 const groupWeatherByDays = (forecastData) => {
     let dayIndex = 0;
     return forecastData.reduce((daysArray, element, index) => {
