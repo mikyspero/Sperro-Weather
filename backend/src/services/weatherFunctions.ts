@@ -18,13 +18,11 @@ const findMostFrequentWeatherType2 = (
   const weatherCount = weatherArray.reduce(
     (countMap: { [key: string]: number }, weatherObj) => {
       const mainWeather = weatherObj.weather.main;
-      console.log(mainWeather);
       countMap[mainWeather] = (countMap[mainWeather] || 0) + 1;
       return countMap;
     },
     {}
   );
-  console.log(weatherCount);
   return Object.keys(weatherCount).reduce(
     (mostLikely: string, weatherType: string) => {
       return weatherCount[mostLikely] < weatherCount[weatherType]
@@ -75,7 +73,6 @@ const fetchPeriodicWeather = async (
   }
   const weatherData = await response.json(); // Extract JSON data from the response
   const rawWeatherArray: RawWeatherObject[] = weatherData.list;
-  console.log(rawWeatherArray);
   return rawWeatherArray; //makeWeather(weatherData) // Process weather data // Extract JSON data from the response
 };
 const isValidWeatherDataArray = (rawWeatherArray: RawWeatherObject[]) => {
@@ -121,25 +118,40 @@ const buildPeriodicWeatherArray = async (
   });
 };
 
-const groupWeatherByDays = (// need a decent way to work with datas
+const groupWeatherByDays2 = (
   forecastData: WeatherObject[]
 ): WeatherObject[][] => {
-  if (forecastData.length === 0) {
-    return [];
-  }
-
-  const firstDate = forecastData[0].date;
-
   return forecastData.reduce(
     (daysArray: WeatherObject[][], element: WeatherObject) => {
-      const dayInSeconds = 1000 * 3600 * 24;
-      const dateDifference = Math.floor(
-        (element.date.getTime() - firstDate.getTime()) / (dayInSeconds)
-      );
+      //study reduce
+      // Calculate the difference in days from the first day
+      const monthOffset: number =
+        element.date.getMonth() !== forecastData[0].date.getMonth()
+          ? getMonthOffset(element.date)
+          : 0;
+      const dayIndex =
+        element.date.getDate() - forecastData[0].date.getDate() + monthOffset;
+      daysArray[dayIndex] = daysArray[dayIndex] || []; // Initialize sub-array if it doesn't exist
+      daysArray[dayIndex].push(element); // Push data into the sub-array corresponding to the day
+      return daysArray;
+    },
+    []
+  );
+};
 
-      daysArray[dateDifference] = daysArray[dateDifference] || [];
-      daysArray[dateDifference].push(element);
-
+const groupWeatherByDays = (
+  forecastData: WeatherObject[]
+): WeatherObject[][] => {
+  let dayIndex = 0;
+  return forecastData.reduce(
+    (daysArray: WeatherObject[][], element: WeatherObject, index: number) => {
+      if (
+        index !== 0 &&
+        element.date.getDate() !== forecastData[index - 1].date.getDate()
+      ) {
+        dayIndex++;
+      }
+      daysArray[dayIndex] = [...(daysArray[dayIndex] ?? []), element];
       return daysArray;
     },
     []

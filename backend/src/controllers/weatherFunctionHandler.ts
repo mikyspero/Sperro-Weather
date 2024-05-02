@@ -37,10 +37,19 @@ const weatherByCityHandler = async (
 ) => {
   try {
     const city: string = req.query.city_name as string;
-    const stateCode: string|undefined = req.query.state_code as string|undefined;
-    const countryCode: string|undefined = req.query.country_code as string|undefined;
-    const limit: number|undefined = req.query.limit as number|undefined;
-    const coordinates = await getCoordinates(city, stateCode, countryCode, limit);
+    const stateCode: string | undefined = req.query.state_code as
+      | string
+      | undefined;
+    const countryCode: string | undefined = req.query.country_code as
+      | string
+      | undefined;
+    const limit: number | undefined = req.query.limit as number | undefined;
+    const coordinates = await getCoordinates(
+      city,
+      stateCode,
+      countryCode,
+      limit
+    );
     const data = await weatherFunction(
       coordinates.latitude,
       coordinates.longitude

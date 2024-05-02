@@ -21,7 +21,7 @@ const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
 
   // Validate if latitude and longitude are valid numbers
   if (isNaN(latitude) || isNaN(longitude)) {
-    return next(newError("Invalid latitude or longitude provided", 400));
+     next(newError("Invalid latitude or longitude provided", 400));
   }
 
   // Create coordinates object
@@ -29,7 +29,7 @@ const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
 
   // Validate against schema
   if (!coordinatesSchema.safeParse(toBeChecked)) {
-    return next(newError("Invalid coordinates provided", 400));
+     next(newError("Invalid coordinates provided", 400));
   }
 
   next(); // Proceed to the next middleware or route handler
@@ -40,7 +40,7 @@ const checkCity = (req: Request, res: Response, next: NextFunction) => {
 
   // Check if city is provided
   if (!city) {
-    return next(newError("City is required", 400));
+     next(newError("City is required", 400));
   }
 
   next(); // Proceed to the next middleware or route handler

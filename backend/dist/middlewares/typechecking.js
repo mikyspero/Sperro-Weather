@@ -14,13 +14,13 @@ const checkCoordinates = (req, res, next) => {
     const longitude = parseFloat(longitudeString);
     // Validate if latitude and longitude are valid numbers
     if (isNaN(latitude) || isNaN(longitude)) {
-        return next((0, webError_1.newError)("Invalid latitude or longitude provided", 400));
+        next((0, webError_1.newError)("Invalid latitude or longitude provided", 400));
     }
     // Create coordinates object
     const toBeChecked = { latitude, longitude };
     // Validate against schema
     if (!coordinates_schema_1.coordinatesSchema.safeParse(toBeChecked)) {
-        return next((0, webError_1.newError)("Invalid coordinates provided", 400));
+        next((0, webError_1.newError)("Invalid coordinates provided", 400));
     }
     next(); // Proceed to the next middleware or route handler
 };
@@ -29,7 +29,7 @@ const checkCity = (req, res, next) => {
     const city = req.query.city_name;
     // Check if city is provided
     if (!city) {
-        return next((0, webError_1.newError)("City is required", 400));
+        next((0, webError_1.newError)("City is required", 400));
     }
     next(); // Proceed to the next middleware or route handler
 };

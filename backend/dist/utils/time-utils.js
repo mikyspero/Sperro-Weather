@@ -47,3 +47,4 @@ const getMonthOffset = (date) => {
     return monthLengthArray[date.getMonth()];
 };
 exports.getMonthOffset = getMonthOffset;
+const day = 1000 * 3600 * 24;

@@ -43,4 +43,6 @@ const getMonthOffset = (date: Date) => {
   return monthLengthArray[date.getMonth()];
 };
 
+const day: number = 1000 * 3600 * 24;
+
 export { getMonthOffset, getMonth, isLeapYear };

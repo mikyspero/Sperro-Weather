@@ -7,8 +7,8 @@ import {
 import { checkCity} from "../middlewares/typechecking";
 
 const cityRouter = Router();
-cityRouter.use(checkCity);
 //mount middleware for coordinates validation
+cityRouter.use(checkCity);
 // Route for current weather
 cityRouter.get("/current", getCurrentWeatherHandlerByCity);
 
