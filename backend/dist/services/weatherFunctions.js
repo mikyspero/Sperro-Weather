@@ -12,8 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDailyWeather = exports.getHourlyWeather = exports.getCurrentWeather = void 0;
 const webError_1 = require("../utils/webError");
 const weather_schemas_1 = require("../models/weather-schemas");
-const API_KEY = "5772d8c327100a7fd94c08a3add3606e" || process.env.API_KEY;
-const API_ROOT = `https://api.openweathermap.org/`;
+const weather_api_1 = require("../api/weather_api");
 const isValidRawWeatherObject = (toBeChecked) => {
     return weather_schemas_1.RawWeatherObjectSchema.safeParse(toBeChecked).success;
 };
@@ -59,17 +58,6 @@ const findMostFrequentWeatherTypeOriginal = (subarray) => {
 };
 const getMaxTemperature = (dailyWeather) => Math.max(...dailyWeather.map((element) => element.temperature.max));
 const getMinTemperature = (dailyWeather) => Math.min(...dailyWeather.map((element) => element.temperature.min));
-const getEndpoint = (latitude, longitude) => `${API_ROOT}data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
-const fetchPeriodicWeather = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
-    const endPoint = getEndpoint(latitude, longitude);
-    const response = yield fetch(endPoint); // Send request to Weather API
-    if (!response.ok) {
-        throw (0, webError_1.newError)("Failed to fetch weather data", 500);
-    }
-    const weatherData = yield response.json(); // Extract JSON data from the response
-    const rawWeatherArray = weatherData.list;
-    return rawWeatherArray; //makeWeather(weatherData) // Process weather data // Extract JSON data from the response
-});
 const isValidWeatherDataArray = (rawWeatherArray) => {
     rawWeatherArray.forEach((element) => {
         if (!isValidRawWeatherObject(element)) {
@@ -135,15 +123,6 @@ const fetchDailyWeather = (daysArray) => {
         };
     });
 };
-const fetchCurrentWeatherRaw = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
-    const endPoint = `${API_ROOT}data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
-    const response = yield fetch(endPoint); // Send request to Weather API
-    if (!response.ok) {
-        throw (0, webError_1.newError)("Failed to fetch weather data", 500);
-    }
-    const weatherData = yield response.json(); // Extract JSON data from the response
-    return weatherData;
-});
 const buildCurrentWeatherObject = (rawWeather) => {
     var _a, _b;
     return {
@@ -166,14 +145,14 @@ const buildCurrentWeatherObject = (rawWeather) => {
     };
 };
 const getCurrentWeather = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
-    const rawWeather = yield fetchCurrentWeatherRaw(latitude, longitude);
+    const rawWeather = yield (0, weather_api_1.fetchCurrentWeatherRaw)(latitude, longitude);
     const weather = yield buildCurrentWeatherObject(rawWeather //await isValidWeatherData(rawWeather)
     );
     return weather;
 });
 exports.getCurrentWeather = getCurrentWeather;
 const getHourlyWeather = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
-    const rawWeatherArray = yield fetchPeriodicWeather(latitude, longitude);
+    const rawWeatherArray = yield (0, weather_api_1.fetchPeriodicWeather)(latitude, longitude);
     const weatherArray = yield buildPeriodicWeatherArray(rawWeatherArray //await isValidWeatherDataArray(rawWeatherArray)
     );
     return weatherArray;
