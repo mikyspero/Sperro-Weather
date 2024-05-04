@@ -1,7 +1,7 @@
 import { newError } from "../utils/webError";
 import { Coordinates } from "../types/coordinates";
+import { API_KEY } from "../configs/imported_variables";
 // Define the API key for the OpenWeatherMap API
-const API_KEY = "5772d8c327100a7fd94c08a3add3606e" || process.env.API_KEY;
 const API_ROOT = `https://api.openweathermap.org/`;
 
 // Function to build the endpoint URL for city coordinates lookup

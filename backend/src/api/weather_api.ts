@@ -1,7 +1,7 @@
 import { RawWeatherObject } from "../types/raw-weather-object";
-import { newError, WebError } from "../utils/webError";
+import { newError,} from "../utils/webError";
+import { API_KEY } from "../configs/imported_variables";
 
-const API_KEY = "5772d8c327100a7fd94c08a3add3606e" || process.env.API_KEY;
 const API_ROOT = `https://api.openweathermap.org/`;
 
 // Function to build the endpoint URL for city coordinates lookup

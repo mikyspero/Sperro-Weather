@@ -13,11 +13,11 @@ const coordinate_routes_1 = require("./routes/coordinate-routes");
 const city_routes_1 = require("./routes/city-routes");
 const error_handling_1 = require("./middlewares/error-handling");
 const limiters_1 = require("./middlewares/limiters");
+const imported_variables_1 = require("./configs/imported_variables");
 // Load environment variables from .env file
 dotenv_1.default.config({ path: __dirname + "/.env" });
 // Define the port number to listen on, using the PORT environment variable if available,
 // or default to 3000
-const port = 3000 || process.env.PORT; // Use the PORT environment variable
 //console.log(process.env); // Check all loaded environment variables
 const app = (0, express_1.default)();
 //Middleware to disable the "X-Powered-By" header
@@ -34,6 +34,6 @@ app.use("/", city_routes_1.cityRouter);
 //middleware to Send an appropriate error response to the client
 app.use(error_handling_1.errorHandler);
 // Start the Express server and listen for incoming requests on the specified port
-app.listen(port, () => {
-    console.log(`listening on port ${port}`);
+app.listen(imported_variables_1.port, () => {
+    console.log(`listening on port ${imported_variables_1.port}`);
 });

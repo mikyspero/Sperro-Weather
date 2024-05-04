@@ -8,11 +8,11 @@ import { weatherRouter } from "./routes/coordinate-routes";
 import { cityRouter } from "./routes/city-routes";
 import { errorHandler } from "./middlewares/error-handling";
 import { dailyRateLimit, minuteRateLimit } from "./middlewares/limiters";
+import { port } from "./configs/imported_variables";
 // Load environment variables from .env file
 dotenv.config({ path: __dirname + "/.env" });
 // Define the port number to listen on, using the PORT environment variable if available,
 // or default to 3000
-const port = 3000 || process.env.PORT; // Use the PORT environment variable
 //console.log(process.env); // Check all loaded environment variables
 const app = express();
 //Middleware to disable the "X-Powered-By" header
