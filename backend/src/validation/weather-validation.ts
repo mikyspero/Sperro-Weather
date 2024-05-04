@@ -11,7 +11,7 @@ const isValidRawWeatherObject = (toBeChecked: RawWeatherObject): boolean => {
   const isValidWeatherDataArray = (rawWeatherArray: RawWeatherObject[]) => {
     rawWeatherArray.forEach((element: RawWeatherObject) => {
       if (!isValidRawWeatherObject(element)) {
-        throw new WebError("Failed to parse weather data", 500);
+        throw newError("Failed to parse weather data", 500);
       }
     });
     return rawWeatherArray;
@@ -19,7 +19,7 @@ const isValidRawWeatherObject = (toBeChecked: RawWeatherObject): boolean => {
   
   const isValidWeatherData = (rawWeatherData: RawWeatherObject) => {
     if (!isValidRawWeatherObject(rawWeatherData)) {
-      throw new WebError("Failed to parse weather data", 500);
+      throw newError("Failed to parse weather data", 500);
     }
     return rawWeatherData;
   };

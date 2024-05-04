@@ -10,23 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoordinates = void 0;
-const coordinates_schema_1 = require("../models/coordinates-schema");
-const webError_1 = require("../utils/webError");
 const geolocation_api_1 = require("../api/geolocation_api");
-// Function to validate the retrieved coordinates against a schema
-const validateCoordinates = (toBeValidated) => {
-    // Validate the coordinates against a schema
-    if (!coordinates_schema_1.coordinatesSchema.safeParse(toBeValidated)) {
-        throw (0, webError_1.newError)("Error fetching coordinates", 500);
-    }
-    // If validation is successful, return the coordinates
-    return toBeValidated;
-};
+const coordinate_validation_1 = require("../validation/coordinate-validation");
 // Main function to get validated coordinates for a given city
 const getCoordinates = (cityName, stateCode, countryCode, limit) => __awaiter(void 0, void 0, void 0, function* () {
     // Fetch coordinates for the specified city
     const coordinates = yield (0, geolocation_api_1.fetchCoordinates)(cityName, stateCode, countryCode, limit);
     // Validate the retrieved coordinates
-    return validateCoordinates(coordinates);
+    return (0, coordinate_validation_1.validateCoordinates)(coordinates);
 });
 exports.getCoordinates = getCoordinates;
