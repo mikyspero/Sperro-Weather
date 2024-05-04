@@ -10,12 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDailyWeather = exports.getHourlyWeather = exports.getCurrentWeather = void 0;
-const webError_1 = require("../utils/webError");
-const weather_schemas_1 = require("../models/weather-schemas");
 const weather_api_1 = require("../api/weather_api");
-const isValidRawWeatherObject = (toBeChecked) => {
-    return weather_schemas_1.RawWeatherObjectSchema.safeParse(toBeChecked).success;
-};
+const weather_utils_1 = require("../utils/weather_utils");
 //a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
 //since the array on which it operates is rather small
 const findMostFrequentWeatherType = (weatherArray) => {
@@ -55,22 +51,6 @@ const findMostFrequentWeatherTypeOriginal = (subarray) => {
         }
     }
     return mostFrequentWeather;
-};
-const getMaxTemperature = (dailyWeather) => Math.max(...dailyWeather.map((element) => element.temperature.max));
-const getMinTemperature = (dailyWeather) => Math.min(...dailyWeather.map((element) => element.temperature.min));
-const isValidWeatherDataArray = (rawWeatherArray) => {
-    rawWeatherArray.forEach((element) => {
-        if (!isValidRawWeatherObject(element)) {
-            throw new webError_1.WebError("Failed to parse weather data", 500);
-        }
-    });
-    return rawWeatherArray;
-};
-const isValidWeatherData = (rawWeatherData) => {
-    if (!isValidRawWeatherObject(rawWeatherData)) {
-        throw new webError_1.WebError("Failed to parse weather data", 500);
-    }
-    return rawWeatherData;
 };
 const buildPeriodicWeatherArray = (rawWeatherData) => {
     return rawWeatherData.map((rawWeatherObject) => {
@@ -117,8 +97,8 @@ const fetchDailyWeather = (daysArray) => {
                 description: "",
             },
             temperature: {
-                min: getMinTemperature(weatherArray),
-                max: getMaxTemperature(weatherArray),
+                min: (0, weather_utils_1.getMinTemperature)(weatherArray),
+                max: (0, weather_utils_1.getMaxTemperature)(weatherArray),
             },
         };
     });

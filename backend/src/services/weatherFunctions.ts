@@ -1,12 +1,10 @@
 import { RawWeatherObject } from "../types/raw-weather-object";
 import { WeatherObject } from "../types/weather-object";
-import { newError, WebError } from "../utils/webError";
-import { RawWeatherObjectSchema } from "../models/weather-schemas";
-import { fetchCurrentWeatherRaw,fetchPeriodicWeather } from "../api/weather_api";
-
-const isValidRawWeatherObject = (toBeChecked: RawWeatherObject): boolean => {
-  return RawWeatherObjectSchema.safeParse(toBeChecked).success;
-};
+import {
+  fetchCurrentWeatherRaw,
+  fetchPeriodicWeather,
+} from "../api/weather_api";
+import { getMaxTemperature, getMinTemperature } from "../utils/weather_utils";
 
 //a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
 //since the array on which it operates is rather small
@@ -56,28 +54,6 @@ const findMostFrequentWeatherTypeOriginal = (subarray: WeatherObject[]) => {
   }
 
   return mostFrequentWeather;
-};
-
-const getMaxTemperature = (dailyWeather: WeatherObject[]) =>
-  Math.max(...dailyWeather.map((element) => element.temperature.max));
-
-const getMinTemperature = (dailyWeather: WeatherObject[]) =>
-  Math.min(...dailyWeather.map((element) => element.temperature.min));
-
-const isValidWeatherDataArray = (rawWeatherArray: RawWeatherObject[]) => {
-  rawWeatherArray.forEach((element: RawWeatherObject) => {
-    if (!isValidRawWeatherObject(element)) {
-      throw new WebError("Failed to parse weather data", 500);
-    }
-  });
-  return rawWeatherArray;
-};
-
-const isValidWeatherData = (rawWeatherData: RawWeatherObject) => {
-  if (!isValidRawWeatherObject(rawWeatherData)) {
-    throw new WebError("Failed to parse weather data", 500);
-  }
-  return rawWeatherData;
 };
 
 const buildPeriodicWeatherArray = (
@@ -141,8 +117,6 @@ const fetchDailyWeather = (daysArray: WeatherObject[][]): WeatherObject[] => {
     };
   });
 };
-
-
 
 const buildCurrentWeatherObject = (
   rawWeather: RawWeatherObject
