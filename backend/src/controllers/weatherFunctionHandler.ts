@@ -3,6 +3,7 @@ import { coordinatesSchema } from "../models/coordinates-schema";
 import { Coordinates } from "../types/coordinates";
 import { getCoordinates } from "../services/location";
 import { WeatherObject } from "../types/weather-object";
+import { HttpStatusCodes } from "../utils/http_status";
 
 const weatherFunctionHandler = async (
   req: Request,
@@ -21,10 +22,10 @@ const weatherFunctionHandler = async (
     const coord: Coordinates = coordinatesSchema.parse({ latitude, longitude });
     //callback to get weather data
     const weatherData = await weatherFunction(coord.latitude, coord.longitude);
-    res.status(200).json(weatherData); // Send processed weather data as JSON response
+    res.status(HttpStatusCodes.OK).json(weatherData); // Send processed weather data as JSON response
   } catch (error) {
     // Pass any error to the error handling middleware
-    next(error); 
+    next(error);
   }
 };
 
@@ -61,7 +62,7 @@ const weatherByCityHandler = async (
       coordinates.latitude,
       coordinates.longitude
     );
-    res.status(200).json(data);
+    res.status(HttpStatusCodes.OK).json(data);
   } catch (error) {
     //pass error to the error handling middleware
     next(error);

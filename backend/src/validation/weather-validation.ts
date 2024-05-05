@@ -1,6 +1,7 @@
 import { WeatherObject } from "../types/weather-object";
 import { WeatherObjectSchema } from "../models/weather-schemas";
 import { newError } from "../utils/webError";
+import { HttpStatusCodes } from "../utils/http_status";
 
 const isWeatherDataValid = (toBeValidated: WeatherObject): WeatherObject => {
   try {
@@ -8,7 +9,7 @@ const isWeatherDataValid = (toBeValidated: WeatherObject): WeatherObject => {
     return WeatherObjectSchema.parse(toBeValidated);
   } catch (error) {
     // Throw a new error with more context
-    throw newError(`Invalid weather data`, 400);
+    throw newError(`Invalid weather data`, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -20,7 +21,7 @@ const isWeatherDataArrayValid = (
     return toBeValidated.map((weatherObj) => isWeatherDataValid(weatherObj));
   } catch (error) {
     // Throw a new error if validation of any element fails
-    throw newError(`Invalid weather data array`, 400);
+    throw newError(`Invalid weather data array`, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
 

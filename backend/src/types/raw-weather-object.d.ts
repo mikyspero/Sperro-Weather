@@ -32,3 +32,5 @@ export interface RawWeatherObject {
     };
     dt_txt: string; // Date and time in text format (YYYY-MM-DD HH:mm:ss)
   }
+
+  

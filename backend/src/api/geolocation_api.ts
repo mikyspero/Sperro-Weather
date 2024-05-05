@@ -1,6 +1,7 @@
 import { newError } from "../utils/webError";
 import { Coordinates } from "../types/coordinates";
 import { API_KEY } from "../configs/imported_variables";
+import { HttpStatusCodes } from "../utils/http_status";
 // Define the API key for the OpenWeatherMap API
 const API_ROOT = `https://api.openweathermap.org/`;
 
@@ -50,7 +51,10 @@ const fetchCoordinates = async (
 
   // Check if the HTTP response is successful
   if (!response.ok) {
-    throw newError("Failed to fetch location data", 500); // Throw an error if response status is not OK
+    throw newError(
+      "Failed to fetch location data",
+      HttpStatusCodes.INTERNAL_SERVER_ERROR
+    ); // Throw an error if response status is not OK
   }
 
   // Parse the JSON response to extract coordinates

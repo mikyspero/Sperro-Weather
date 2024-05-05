@@ -2,6 +2,7 @@ import { newError } from "../utils/webError";
 import { coordinatesSchema } from "../models/coordinates-schema";
 import { Request, Response, NextFunction } from "express";
 import { Coordinates } from "../types/coordinates";
+import { HttpStatusCodes } from "../utils/http_status";
 
 const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
   const latitudeString: string | undefined = req.query.latitude as
@@ -13,7 +14,12 @@ const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
 
   // Check if latitude and longitude are provided and convert to numbers
   if (!latitudeString || !longitudeString) {
-    return next(newError("Latitude and longitude are required", 400));
+    return next(
+      newError(
+        "Latitude and longitude are required",
+        HttpStatusCodes.BAD_REQUEST
+      )
+    );
   }
 
   const latitude: number = parseFloat(latitudeString);
@@ -21,7 +27,12 @@ const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
 
   // Validate if latitude and longitude are valid numbers
   if (isNaN(latitude) || isNaN(longitude)) {
-     next(newError("Invalid latitude or longitude provided", 400));
+    next(
+      newError(
+        "Invalid latitude or longitude provided",
+        HttpStatusCodes.BAD_REQUEST
+      )
+    );
   }
 
   // Create coordinates object
@@ -29,7 +40,7 @@ const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
 
   // Validate against schema
   if (!coordinatesSchema.safeParse(toBeChecked)) {
-     next(newError("Invalid coordinates provided", 400));
+    next(newError("Invalid coordinates provided", HttpStatusCodes.BAD_REQUEST));
   }
 
   next(); // Proceed to the next middleware or route handler
@@ -40,12 +51,10 @@ const checkCity = (req: Request, res: Response, next: NextFunction) => {
 
   // Check if city is provided
   if (!city) {
-     next(newError("City is required", 400));
+    next(newError("City is required", HttpStatusCodes.BAD_REQUEST));
   }
 
   next(); // Proceed to the next middleware or route handler
 };
 
-
-
-export { checkCoordinates,checkCity };
+export { checkCoordinates, checkCity };
