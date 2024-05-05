@@ -5,6 +5,10 @@ import {
   fetchPeriodicWeather,
 } from "../api/weather_api";
 import { getMaxTemperature, getMinTemperature } from "../utils/weather_utils";
+import {
+  isWeatherDataValid,
+  isWeatherDataArrayValid,
+} from "../validation/weather-validation";
 
 //a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
 //since the array on which it operates is rather small
@@ -149,10 +153,8 @@ const getCurrentWeather = async (
     latitude,
     longitude
   );
-  const weather: WeatherObject = await buildCurrentWeatherObject(
-    rawWeather //await isValidWeatherData(rawWeather)
-  );
-  return weather;
+  const weather: WeatherObject = await buildCurrentWeatherObject(rawWeather);
+  return isWeatherDataValid(weather);
 };
 
 const getHourlyWeather = async (
@@ -166,7 +168,7 @@ const getHourlyWeather = async (
   const weatherArray: WeatherObject[] = await buildPeriodicWeatherArray(
     rawWeatherArray //await isValidWeatherDataArray(rawWeatherArray)
   );
-  return weatherArray;
+  return isWeatherDataArrayValid(weatherArray);
 };
 
 const getDailyWeather = async (
@@ -179,7 +181,7 @@ const getDailyWeather = async (
   );
   const daysArray: WeatherObject[][] = await groupWeatherByDays(weatherArray);
   const dailyWeather: WeatherObject[] = await fetchDailyWeather(daysArray);
-  return dailyWeather;
+  return isWeatherDataArrayValid(dailyWeather);
 };
 
 export { getCurrentWeather, getHourlyWeather, getDailyWeather };

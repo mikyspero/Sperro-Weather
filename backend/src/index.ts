@@ -8,7 +8,7 @@ import { weatherRouter } from "./routes/coordinate-routes";
 import { cityRouter } from "./routes/city-routes";
 import { errorHandler } from "./middlewares/error-handling";
 import { dailyRateLimit, minuteRateLimit } from "./middlewares/limiters";
-import { port } from "./configs/imported_variables";
+import { PORT as port} from "./configs/imported_variables";
 // Load environment variables from .env file
 dotenv.config({ path: __dirname + "/.env" });
 // Define the port number to listen on, using the PORT environment variable if available,

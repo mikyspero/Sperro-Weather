@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RawWeatherObjectSchema = void 0;
+exports.WeatherObjectSchema = exports.RawWeatherObjectSchema = void 0;
 const zod_1 = require("zod");
 // Define Zod schema for RawWeatherObject
 exports.RawWeatherObjectSchema = zod_1.z.object({
@@ -36,4 +36,26 @@ exports.RawWeatherObjectSchema = zod_1.z.object({
         pod: zod_1.z.string(), // Part of the day (e.g., 'n' for night)
     }),
     dt_txt: zod_1.z.string(), // Date and time in text format (YYYY-MM-DD HH:mm:ss)
+});
+// You need to import zod first
+// Defining the WeatherObject schema
+exports.WeatherObjectSchema = zod_1.z.object({
+    date: zod_1.z.date(),
+    weather: zod_1.z.object({
+        main: zod_1.z.string(),
+        description: zod_1.z.string().optional(),
+    }),
+    temperature: zod_1.z.object({
+        current: zod_1.z.number().optional(),
+        average: zod_1.z.number().optional(),
+        feelslike: zod_1.z.number().optional(),
+        min: zod_1.z.number(),
+        max: zod_1.z.number(),
+    }),
+    humidity: zod_1.z.number().optional(),
+    pressure: zod_1.z.number().optional(),
+    wind: zod_1.z.object({
+        speed: zod_1.z.number(),
+        direction: zod_1.z.number(),
+    }).optional(),
 });

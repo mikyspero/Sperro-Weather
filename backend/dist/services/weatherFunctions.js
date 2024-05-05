@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDailyWeather = exports.getHourlyWeather = exports.getCurrentWeather = void 0;
 const weather_api_1 = require("../api/weather_api");
 const weather_utils_1 = require("../utils/weather_utils");
+const weather_validation_1 = require("../validation/weather-validation");
 //a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
 //since the array on which it operates is rather small
 const findMostFrequentWeatherType = (weatherArray) => {
@@ -126,22 +127,21 @@ const buildCurrentWeatherObject = (rawWeather) => {
 };
 const getCurrentWeather = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
     const rawWeather = yield (0, weather_api_1.fetchCurrentWeatherRaw)(latitude, longitude);
-    const weather = yield buildCurrentWeatherObject(rawWeather //await isValidWeatherData(rawWeather)
-    );
-    return weather;
+    const weather = yield buildCurrentWeatherObject(rawWeather);
+    return (0, weather_validation_1.isWeatherDataValid)(weather);
 });
 exports.getCurrentWeather = getCurrentWeather;
 const getHourlyWeather = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
     const rawWeatherArray = yield (0, weather_api_1.fetchPeriodicWeather)(latitude, longitude);
     const weatherArray = yield buildPeriodicWeatherArray(rawWeatherArray //await isValidWeatherDataArray(rawWeatherArray)
     );
-    return weatherArray;
+    return (0, weather_validation_1.isWeatherDataArrayValid)(weatherArray);
 });
 exports.getHourlyWeather = getHourlyWeather;
 const getDailyWeather = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
     const weatherArray = yield getHourlyWeather(latitude, longitude);
     const daysArray = yield groupWeatherByDays(weatherArray);
     const dailyWeather = yield fetchDailyWeather(daysArray);
-    return dailyWeather;
+    return (0, weather_validation_1.isWeatherDataArrayValid)(dailyWeather);
 });
 exports.getDailyWeather = getDailyWeather;

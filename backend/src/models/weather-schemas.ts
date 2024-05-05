@@ -37,3 +37,27 @@ export const RawWeatherObjectSchema = z.object({
   }),
   dt_txt: z.string(), // Date and time in text format (YYYY-MM-DD HH:mm:ss)
 });
+
+// You need to import zod first
+
+// Defining the WeatherObject schema
+export const WeatherObjectSchema = z.object({
+  date: z.date(),
+  weather: z.object({
+    main: z.string(),
+    description: z.string().optional(),
+  }),
+  temperature: z.object({
+    current: z.number().optional(),
+    average: z.number().optional(),
+    feelslike: z.number().optional(),
+    min: z.number(),
+    max: z.number(),
+  }),
+  humidity: z.number().optional(),
+  pressure: z.number().optional(),
+  wind: z.object({
+    speed: z.number(),
+    direction: z.number(),
+  }).optional(),
+});
