@@ -3,6 +3,7 @@ import { coordinatesSchema } from "../models/coordinates-schema";
 import { Request, Response, NextFunction } from "express";
 import { Coordinates } from "../types/coordinates";
 import { HttpStatusCodes } from "../utils/http_status";
+import { validateCoordinates } from "../validation/coordinate-validation";
 
 const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
   const latitudeString: string | undefined = req.query.latitude as
@@ -11,7 +12,6 @@ const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
   const longitudeString: string | undefined = req.query.longitude as
     | string
     | undefined;
-
   // Check if latitude and longitude are provided and convert to numbers
   if (!latitudeString || !longitudeString) {
     return next(
@@ -21,29 +21,14 @@ const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
       )
     );
   }
-
   const latitude: number = parseFloat(latitudeString);
   const longitude: number = parseFloat(longitudeString);
-
-  // Validate if latitude and longitude are valid numbers
-  if (isNaN(latitude) || isNaN(longitude)) {
-    next(
-      newError(
-        "Invalid latitude or longitude provided",
-        HttpStatusCodes.BAD_REQUEST
-      )
-    );
+  try {
+    validateCoordinates({ latitude, longitude });
+    return next(); // Proceed to the next middleware or route handler
+  } catch (error) {
+    return next(error);
   }
-
-  // Create coordinates object
-  const toBeChecked: Coordinates = { latitude, longitude };
-
-  // Validate against schema
-  if (!coordinatesSchema.safeParse(toBeChecked)) {
-    next(newError("Invalid coordinates provided", HttpStatusCodes.BAD_REQUEST));
-  }
-
-  next(); // Proceed to the next middleware or route handler
 };
 
 const checkCity = (req: Request, res: Response, next: NextFunction) => {

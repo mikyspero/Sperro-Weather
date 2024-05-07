@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkCity = exports.checkCoordinates = void 0;
 const webError_1 = require("../utils/webError");
-const coordinates_schema_1 = require("../models/coordinates-schema");
 const http_status_1 = require("../utils/http_status");
+const coordinate_validation_1 = require("../validation/coordinate-validation");
 const checkCoordinates = (req, res, next) => {
     const latitudeString = req.query.latitude;
     const longitudeString = req.query.longitude;
@@ -13,17 +13,13 @@ const checkCoordinates = (req, res, next) => {
     }
     const latitude = parseFloat(latitudeString);
     const longitude = parseFloat(longitudeString);
-    // Validate if latitude and longitude are valid numbers
-    if (isNaN(latitude) || isNaN(longitude)) {
-        next((0, webError_1.newError)("Invalid latitude or longitude provided", http_status_1.HttpStatusCodes.BAD_REQUEST));
+    try {
+        (0, coordinate_validation_1.validateCoordinates)({ latitude, longitude });
+        return next(); // Proceed to the next middleware or route handler
     }
-    // Create coordinates object
-    const toBeChecked = { latitude, longitude };
-    // Validate against schema
-    if (!coordinates_schema_1.coordinatesSchema.safeParse(toBeChecked)) {
-        next((0, webError_1.newError)("Invalid coordinates provided", http_status_1.HttpStatusCodes.BAD_REQUEST));
+    catch (error) {
+        return next(error);
     }
-    next(); // Proceed to the next middleware or route handler
 };
 exports.checkCoordinates = checkCoordinates;
 const checkCity = (req, res, next) => {

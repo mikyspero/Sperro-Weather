@@ -3,7 +3,7 @@ import { coordinatesSchema } from "../models/coordinates-schema";
 import { newError, fromZodToWeb } from "../utils/webError";
 import { HttpStatusCodes } from "../utils/http_status";
 import { z } from "zod";
-const validateCoordinates = (toBeValidated: Coordinates) => {
+const validateCoordinates = (toBeValidated: Coordinates): Coordinates => {
   // Validate the coordinates against a schema
   try {
     coordinatesSchema.parse(toBeValidated);
