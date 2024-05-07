@@ -1,5 +1,6 @@
 // Load environment variables from a .env file into process.env
 import dotenv from "dotenv";
+dotenv.config(); // Load environment variables from .env file
 // Import the Express framework
 import express from "express";
 // Import CORS for enabling Cross-Origin Resource Sharing
@@ -9,8 +10,6 @@ import { cityRouter } from "./routes/city-routes";
 import { errorHandler } from "./middlewares/error-handling";
 import { dailyRateLimit, minuteRateLimit } from "./middlewares/limiters";
 import { PORT as port} from "./configs/imported_variables";
-// Load environment variables from .env file
-dotenv.config({ path: __dirname + "/.env" });
 // Define the port number to listen on, using the PORT environment variable if available,
 // or default to 3000
 //console.log(process.env); // Check all loaded environment variables

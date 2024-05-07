@@ -1,4 +1,4 @@
-const PORT = process.env.PORT || 3000; // Use the PORT environment variable
-const API_KEY = process.env.API_KEY || "5772d8c327100a7fd94c08a3add3606e";
+const PORT: number = parseInt(process.env.PORT as string);
+const API_KEY = process.env.API_KEY;
 
-export { PORT,API_KEY };
+export { PORT, API_KEY };

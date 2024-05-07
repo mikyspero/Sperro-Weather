@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // Load environment variables from a .env file into process.env
 const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config(); // Load environment variables from .env file
 // Import the Express framework
 const express_1 = __importDefault(require("express"));
 // Import CORS for enabling Cross-Origin Resource Sharing
@@ -14,8 +15,6 @@ const city_routes_1 = require("./routes/city-routes");
 const error_handling_1 = require("./middlewares/error-handling");
 const limiters_1 = require("./middlewares/limiters");
 const imported_variables_1 = require("./configs/imported_variables");
-// Load environment variables from .env file
-dotenv_1.default.config({ path: __dirname + "/.env" });
 // Define the port number to listen on, using the PORT environment variable if available,
 // or default to 3000
 //console.log(process.env); // Check all loaded environment variables
