@@ -1,19 +1,22 @@
 import { Coordinates } from "../types/coordinates";
 import { coordinatesSchema } from "../models/coordinates-schema";
-import { newError } from "../utils/webError";
+import { newError, fromZodToWeb } from "../utils/webError";
 import { HttpStatusCodes } from "../utils/http_status";
-
+import { z } from "zod";
 const validateCoordinates = (toBeValidated: Coordinates) => {
   // Validate the coordinates against a schema
-  if (!coordinatesSchema.safeParse(toBeValidated)) {
+  try {
+    coordinatesSchema.parse(toBeValidated);
+    return toBeValidated;
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      throw fromZodToWeb(error);
+    }
     throw newError(
-      "Error fetching coordinates",
+      "unknown error parsing the coordinates",
       HttpStatusCodes.INTERNAL_SERVER_ERROR
     );
   }
-
-  // If validation is successful, return the coordinates
-  return toBeValidated;
 };
 
 export { validateCoordinates };
