@@ -24,6 +24,6 @@ exports.coordinatesSchema = zod_1.z.object({
         message: "Longitude is required",
     })
         .refine((value) => !isNaN(value), {
-        message: "Latitude must be a valid number",
+        message: "Longitude must be a valid number",
     }),
 });
