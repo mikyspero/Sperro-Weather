@@ -21,10 +21,8 @@ const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
       )
     );
   }
-
   const latitude: number = parseFloat(latitudeString);
   const longitude: number = parseFloat(longitudeString);
-
   // Validate if latitude and longitude are valid numbers
   if (isNaN(latitude) || isNaN(longitude)) {
     next(
