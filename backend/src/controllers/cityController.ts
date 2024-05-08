@@ -30,6 +30,8 @@ const getDailyWeatherHandlerByCity = async (
   await weatherByCityHandler(req, res, next, getDailyWeather);
 };
 
+
+
 export {
   getCurrentWeatherHandlerByCity,
   getHourlyWeatherHandlerByCity,
