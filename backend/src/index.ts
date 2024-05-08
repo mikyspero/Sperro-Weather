@@ -25,7 +25,7 @@ app.use(minuteRateLimit);
 app.use(dailyRateLimit);
 
 app.use("/weather", weatherRouter);
-app.use("/", cityRouter);
+app.use("/city", cityRouter);
 //middleware to Send an appropriate error response to the client
 app.use(errorHandler);
 // Start the Express server and listen for incoming requests on the specified port

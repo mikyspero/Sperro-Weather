@@ -29,7 +29,7 @@ app.use((0, cors_1.default)({ methods: ["GET"] }));
 app.use(limiters_1.minuteRateLimit);
 app.use(limiters_1.dailyRateLimit);
 app.use("/weather", coordinate_routes_1.weatherRouter);
-app.use("/", city_routes_1.cityRouter);
+app.use("/city", city_routes_1.cityRouter);
 //middleware to Send an appropriate error response to the client
 app.use(error_handling_1.errorHandler);
 // Start the Express server and listen for incoming requests on the specified port

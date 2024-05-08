@@ -3,8 +3,10 @@ import {
   getCurrentWeatherHandler,
   getHourlyWeatherHandler,
   getDailyWeatherHandler,
+  getWeatherByParam,
 } from "../controllers/weatherController";
 import { checkCoordinates } from "../middlewares/typechecking";
+
 const weatherRouter = Router();
 //mount middleware for coordinates validation
 weatherRouter.use(checkCoordinates);
@@ -16,5 +18,5 @@ weatherRouter.get("/hourly", getHourlyWeatherHandler);
 
 // Route for daily weather
 weatherRouter.get("/daily", getDailyWeatherHandler);
-
+weatherRouter.get("/ass/:weather", getWeatherByParam);
 export { weatherRouter };

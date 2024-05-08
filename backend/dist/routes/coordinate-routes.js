@@ -14,3 +14,4 @@ weatherRouter.get("/current", weatherController_1.getCurrentWeatherHandler);
 weatherRouter.get("/hourly", weatherController_1.getHourlyWeatherHandler);
 // Route for daily weather
 weatherRouter.get("/daily", weatherController_1.getDailyWeatherHandler);
+weatherRouter.get("/ass/:weather", weatherController_1.getWeatherByParam);
