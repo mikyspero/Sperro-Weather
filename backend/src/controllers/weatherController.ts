@@ -8,31 +8,6 @@ import { Request, Response, NextFunction } from "express";
 import { newError } from "../utils/webError";
 import { HttpStatusCodes } from "../utils/http_status";
 
-// Route handler for getting weather forecasts based by coordinates
-const getCurrentWeatherHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  await weatherFunctionHandler(req, res, next, getCurrentWeather);
-};
-
-const getHourlyWeatherHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  await weatherFunctionHandler(req, res, next, getHourlyWeather);
-};
-
-const getDailyWeatherHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  await weatherFunctionHandler(req, res, next, getDailyWeather);
-};
-
 const switchWeather = (key: string) => {
   console.log(key);
   switch (key) {
@@ -62,7 +37,7 @@ const checkParams = (key: string) => {
   return key;
 };
 
-const getWeatherByParam = async (
+const getWeather = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -78,8 +53,5 @@ const getWeatherByParam = async (
 };
 
 export {
-  getCurrentWeatherHandler,
-  getHourlyWeatherHandler,
-  getDailyWeatherHandler,
-  getWeatherByParam,
+  getWeather,
 };

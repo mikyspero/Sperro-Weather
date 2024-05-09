@@ -9,4 +9,4 @@ exports.weatherRouter = weatherRouter;
 //mount middleware for coordinates validation
 weatherRouter.use(typechecking_1.checkCoordinates);
 // a single route now handles every weather case using parameter parsing
-weatherRouter.get("/:weather", weatherController_1.getWeatherByParam);
+weatherRouter.get("/:weather", weatherController_1.getWeather);
