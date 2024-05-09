@@ -34,6 +34,7 @@ const getDailyWeatherHandler = async (
 };
 
 const switchWeather = (key: string) => {
+  console.log(key);
   switch (key) {
     case "current":
       return getCurrentWeather;
@@ -67,7 +68,9 @@ const getWeatherByParam = async (
   next: NextFunction
 ) => {
   try {
-    const key: string = checkParams(req.params["weather"]);
+    const key: string = checkParams(
+      req.params["weather"].trim().toLocaleLowerCase()
+    );
     await weatherFunctionHandler(req, res, next, switchWeather(key));
   } catch (error) {
     next(error);

@@ -9,14 +9,15 @@ import { checkCoordinates } from "../middlewares/typechecking";
 
 const weatherRouter = Router();
 //mount middleware for coordinates validation
-weatherRouter.use(checkCoordinates);
+//weatherRouter.use(checkCoordinates);
 // Route for current weather
-weatherRouter.get("/current", getCurrentWeatherHandler);
+//weatherRouter.get("/current", getCurrentWeatherHandler);
 
 // Route for hourly weather
-weatherRouter.get("/hourly", getHourlyWeatherHandler);
+//weatherRouter.get("/hourly", getHourlyWeatherHandler);
 
 // Route for daily weather
-weatherRouter.get("/daily", getDailyWeatherHandler);
-weatherRouter.get("/ass/:weather", getWeatherByParam);
+//weatherRouter.get("/daily", getDailyWeatherHandler);
+// a single route now handles every weather case using parameter parsing
+weatherRouter.get("/:weather", getWeatherByParam);
 export { weatherRouter };
