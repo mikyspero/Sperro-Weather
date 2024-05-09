@@ -32,7 +32,8 @@ export const realCityController = async (
       ["latitude", `${coordinates.latitude}`],
       ["longitude", `${coordinates.longitude}`],
     ]);
-    const redirectUrl: string = `weather/${wildcardPath}` + "?" + queryString;
+    const redirectUrl: string = `/weather/${wildcardPath}` + "?" + queryString;
+    console.log(redirectUrl);
     res.redirect(redirectUrl);
   } catch (err) {
     next(err);

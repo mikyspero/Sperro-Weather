@@ -1,8 +1,6 @@
 import { Router } from "express";
 import {
-  getCurrentWeatherHandler,
-  getHourlyWeatherHandler,
-  getDailyWeatherHandler,
+
   getWeatherByParam,
 } from "../controllers/weatherController";
 import { checkCoordinates } from "../middlewares/typechecking";
