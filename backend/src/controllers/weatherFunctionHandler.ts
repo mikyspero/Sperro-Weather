@@ -29,43 +29,4 @@ const weatherFunctionHandler = async (
   }
 };
 
-// Route handler to get weather data based on a city name
-const weatherByCityHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  weatherFunction: (
-    latitude: number,
-    longitude: number
-  ) => Promise<WeatherObject | WeatherObject[]>
-) => {
-  try {
-    //parse the city name from the query string, it's valid from middleware
-    const city: string = req.query.city_name as string;
-    //the remaining query parameters are optional so they can be undefined
-    const stateCode: string | undefined = req.query.state_code as
-      | string
-      | undefined;
-    const countryCode: string | undefined = req.query.country_code as
-      | string
-      | undefined;
-    const limit: number | undefined = req.query.limit as number | undefined;
-    //calling the geolocation service to get the latitude and longitude of the city
-    const coordinates = await getCoordinates(
-      city,
-      stateCode,
-      countryCode,
-      limit
-    );
-    //callback to get weather data
-    const data = await weatherFunction(
-      coordinates.latitude,
-      coordinates.longitude
-    );
-    res.status(HttpStatusCodes.OK).json(data);
-  } catch (error) {
-    //pass error to the error handling middleware
-    next(error);
-  }
-};
-export { weatherFunctionHandler, weatherByCityHandler };
+export { weatherFunctionHandler};

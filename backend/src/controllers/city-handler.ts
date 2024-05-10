@@ -2,7 +2,7 @@ import { Coordinates } from "../types/coordinates";
 import { getCoordinates } from "../services/location";
 import { Request, Response, NextFunction } from "express";
 
-export const realCityController = async (
+export const cityController = async (
   req: Request,
   res: Response,
   next: NextFunction
