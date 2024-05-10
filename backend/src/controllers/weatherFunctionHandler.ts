@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { coordinatesSchema } from "../models/coordinates-schema";
 import { Coordinates } from "../types/coordinates";
-import { getCoordinates } from "../services/location";
 import { WeatherObject } from "../types/weather-object";
 import { HttpStatusCodes } from "../utils/http_status";
 
@@ -29,4 +28,4 @@ const weatherFunctionHandler = async (
   }
 };
 
-export { weatherFunctionHandler};
+export { weatherFunctionHandler };
