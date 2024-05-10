@@ -6,6 +6,7 @@ import {
 } from "../services/weatherFunctions";
 import { Request, Response, NextFunction } from "express";
 import { newError } from "../utils/webError";
+import { checkWeatherType } from "../validation/parameter-validation";
 import { HttpStatusCodes } from "../utils/http_status";
 
 const switchWeather = (key: string) => {
@@ -25,25 +26,9 @@ const switchWeather = (key: string) => {
   }
 };
 
-const checkParams = (key: string) => {
-  const allowedValues = ["current", "hourly", "daily"];
-  if (
-    key !== allowedValues[0] &&
-    key !== allowedValues[1] &&
-    key !== allowedValues[2]
-  ) {
-    throw newError("Invalid Url", HttpStatusCodes.FORBIDDEN);
-  }
-  return key;
-};
-
-const getWeather = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getWeather = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const key: string = checkParams(
+    const key: string = checkWeatherType(
       req.params["weather"].trim().toLocaleLowerCase()
     );
     await weatherFunctionHandler(req, res, next, switchWeather(key));
@@ -52,6 +37,4 @@ const getWeather = async (
   }
 };
 
-export {
-  getWeather,
-};
+export { getWeather };
