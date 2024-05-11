@@ -125,21 +125,21 @@ const buildCurrentWeatherObject = (rawWeather) => {
         },
     };
 };
-const getCurrentWeather = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
-    const rawWeather = yield (0, weather_api_1.fetchCurrentWeatherRaw)(latitude, longitude);
+const getCurrentWeather = (coordinates) => __awaiter(void 0, void 0, void 0, function* () {
+    const rawWeather = yield (0, weather_api_1.fetchCurrentWeatherRaw)(coordinates);
     const weather = yield buildCurrentWeatherObject(rawWeather);
     return (0, weather_validation_1.isWeatherDataValid)(weather);
 });
 exports.getCurrentWeather = getCurrentWeather;
-const getHourlyWeather = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
-    const rawWeatherArray = yield (0, weather_api_1.fetchPeriodicWeather)(latitude, longitude);
+const getHourlyWeather = (coordinates) => __awaiter(void 0, void 0, void 0, function* () {
+    const rawWeatherArray = yield (0, weather_api_1.fetchPeriodicWeather)(coordinates);
     const weatherArray = yield buildPeriodicWeatherArray(rawWeatherArray //await isValidWeatherDataArray(rawWeatherArray)
     );
     return (0, weather_validation_1.isWeatherDataArrayValid)(weatherArray);
 });
 exports.getHourlyWeather = getHourlyWeather;
-const getDailyWeather = (latitude, longitude) => __awaiter(void 0, void 0, void 0, function* () {
-    const weatherArray = yield getHourlyWeather(latitude, longitude);
+const getDailyWeather = (coordinates) => __awaiter(void 0, void 0, void 0, function* () {
+    const weatherArray = yield getHourlyWeather(coordinates);
     const daysArray = yield groupWeatherByDays(weatherArray);
     const dailyWeather = yield fetchDailyWeather(daysArray);
     return (0, weather_validation_1.isWeatherDataArrayValid)(dailyWeather);

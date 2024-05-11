@@ -2,17 +2,17 @@ import { RawWeatherObject } from "../types/raw-weather-object";
 import { newError } from "../utils/webError";
 import { API_KEY } from "../configs/imported_variables";
 import { HttpStatusCodes } from "../utils/http_status";
+import { Coordinates } from "../types/coordinates";
 
 const API_ROOT = `https://api.openweathermap.org/`;
 
 // Function to build the endpoint URL for city coordinates lookup
-const getEndpoint = (latitude: number, longitude: number) =>
-  `${API_ROOT}data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
+const getEndpoint = (coordinates: Coordinates) =>
+  `${API_ROOT}data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${API_KEY}&units=metric`;
 const fetchCurrentWeatherRaw = async (
-  latitude: number,
-  longitude: number
+  coordinates: Coordinates
 ): Promise<RawWeatherObject> => {
-  const endPoint = `${API_ROOT}data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
+  const endPoint = `${API_ROOT}data/2.5/weather?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${API_KEY}&units=metric`;
   const response = await fetch(endPoint); // Send request to Weather API
   if (!response.ok) {
     throw newError(
@@ -25,10 +25,9 @@ const fetchCurrentWeatherRaw = async (
 };
 
 const fetchPeriodicWeather = async (
-  latitude: number,
-  longitude: number
+  coordinates:Coordinates
 ): Promise<RawWeatherObject[]> => {
-  const endPoint = getEndpoint(latitude, longitude);
+  const endPoint = getEndpoint(coordinates);
   const response = await fetch(endPoint); // Send request to Weather API
   if (!response.ok) {
     throw newError(

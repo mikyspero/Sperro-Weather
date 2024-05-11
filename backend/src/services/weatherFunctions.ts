@@ -9,6 +9,7 @@ import {
   isWeatherDataValid,
   isWeatherDataArrayValid,
 } from "../validation/weather-validation";
+import { Coordinates } from "../types/coordinates";
 
 //a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
 //since the array on which it operates is rather small
@@ -146,24 +147,20 @@ const buildCurrentWeatherObject = (
 };
 
 const getCurrentWeather = async (
-  latitude: number,
-  longitude: number
+  coordinates: Coordinates
 ): Promise<WeatherObject> => {
   const rawWeather: RawWeatherObject = await fetchCurrentWeatherRaw(
-    latitude,
-    longitude
+    coordinates
   );
   const weather: WeatherObject = await buildCurrentWeatherObject(rawWeather);
   return isWeatherDataValid(weather);
 };
 
 const getHourlyWeather = async (
-  latitude: number,
-  longitude: number
+  coordinates: Coordinates
 ): Promise<WeatherObject[]> => {
   const rawWeatherArray: RawWeatherObject[] = await fetchPeriodicWeather(
-    latitude,
-    longitude
+    coordinates
   );
   const weatherArray: WeatherObject[] = await buildPeriodicWeatherArray(
     rawWeatherArray //await isValidWeatherDataArray(rawWeatherArray)
@@ -172,13 +169,9 @@ const getHourlyWeather = async (
 };
 
 const getDailyWeather = async (
-  latitude: number,
-  longitude: number
+  coordinates: Coordinates
 ): Promise<WeatherObject[]> => {
-  const weatherArray: WeatherObject[] = await getHourlyWeather(
-    latitude,
-    longitude
-  );
+  const weatherArray: WeatherObject[] = await getHourlyWeather(coordinates);
   const daysArray: WeatherObject[][] = await groupWeatherByDays(weatherArray);
   const dailyWeather: WeatherObject[] = await fetchDailyWeather(daysArray);
   return isWeatherDataArrayValid(dailyWeather);

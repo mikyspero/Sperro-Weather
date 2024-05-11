@@ -9,8 +9,7 @@ const weatherFunctionHandler = async (
   res: Response,
   next: NextFunction,
   weatherFunction: (
-    latitude: number,
-    longitude: number
+    coordinaates: Coordinates
   ) => Promise<WeatherObject | WeatherObject[]>
 ) => {
   try {
@@ -20,7 +19,7 @@ const weatherFunctionHandler = async (
     // Parse the extracted values using coordinatesSchema.parse
     const coord: Coordinates = coordinatesSchema.parse({ latitude, longitude });
     //callback to get weather data
-    const weatherData = await weatherFunction(coord.latitude, coord.longitude);
+    const weatherData = await weatherFunction(coord);
     res.status(HttpStatusCodes.OK).json(weatherData); // Send processed weather data as JSON response
   } catch (error) {
     // Pass any error to the error handling middleware
