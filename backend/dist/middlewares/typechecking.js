@@ -4,6 +4,8 @@ exports.checkCity = exports.checkCoordinates = void 0;
 const webError_1 = require("../utils/webError");
 const http_status_1 = require("../utils/http_status");
 const point_validation_1 = require("../validation/point-validation");
+const city_validation_1 = require("../validation/city-validation");
+const request_builders_1 = require("../utils/request-builders");
 const checkCoordinates = (req, res, next) => {
     const latitudeString = req.query.latitude;
     const longitudeString = req.query.longitude;
@@ -23,19 +25,12 @@ const checkCoordinates = (req, res, next) => {
 };
 exports.checkCoordinates = checkCoordinates;
 const checkCity = (req, res, next) => {
-    const city = req.query.city_name;
-    // Check if city is provided
-    if (!city) {
-        next((0, webError_1.newError)("City is required", http_status_1.HttpStatusCodes.BAD_REQUEST));
+    try {
+        const toBeChecked = (0, city_validation_1.validateCity)((0, request_builders_1.buildCityObject)(req));
+        next();
     }
-    next(); // Proceed to the next middleware or route handler
+    catch (error) {
+        next(error);
+    }
 };
 exports.checkCity = checkCity;
-const checkCityRequest = (req, res, next) => {
-    const city = req.query.city_name;
-    //the remaining query parameters are optional so they can be undefined
-    const stateCode = req.query.state_code;
-    const countryCode = req.query.country_code;
-    const limit = req.query.limit;
-    next(); // Proceed to the next middleware or route handler
-};
