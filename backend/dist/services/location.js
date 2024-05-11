@@ -13,9 +13,9 @@ exports.getCoordinates = void 0;
 const geolocation_api_1 = require("../api/geolocation_api");
 const coordinate_validation_1 = require("../validation/coordinate-validation");
 // Main function to get validated coordinates for a given city
-const getCoordinates = (cityName, stateCode, countryCode, limit) => __awaiter(void 0, void 0, void 0, function* () {
+const getCoordinates = (city) => __awaiter(void 0, void 0, void 0, function* () {
     // Fetch coordinates for the specified city
-    const coordinates = yield (0, geolocation_api_1.fetchCoordinates)(cityName, stateCode, countryCode, limit);
+    const coordinates = yield (0, geolocation_api_1.fetchCoordinates)(city);
     // Validate the retrieved coordinates
     return (0, coordinate_validation_1.validateCoordinates)(coordinates);
 });

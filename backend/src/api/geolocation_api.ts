@@ -2,32 +2,28 @@ import { newError } from "../utils/webError";
 import { Coordinates } from "../types/coordinates";
 import { API_KEY } from "../configs/imported_variables";
 import { HttpStatusCodes } from "../utils/http_status";
+import { City } from "../types/city";
 // Define the API key for the OpenWeatherMap API
 const API_ROOT = `https://api.openweathermap.org/`;
 
 // Function to build the endpoint URL for city coordinates lookup
-const buildCityEndpoint = (
-  cityName: string,
-  stateCode?: string,
-  countryCode?: string,
-  limit?: number
-) => {
+const buildCityEndpoint = (city: City) => {
   // Construct the base endpoint URL
-  let endPoint = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}`;
+  let endPoint = `http://api.openweathermap.org/geo/1.0/direct?q=${city.cityName}`;
 
   // Add state code if provided
-  if (typeof stateCode !== "undefined") {
-    endPoint += `,${stateCode}`;
+  if (typeof city.stateCode !== "undefined") {
+    endPoint += `,${city.stateCode}`;
   }
 
   // Add country code if provided
-  if (typeof countryCode !== "undefined") {
-    endPoint += `,${countryCode}`;
+  if (typeof city.countryCode !== "undefined") {
+    endPoint += `,${city.countryCode}`;
   }
 
   // Add limit if provided
-  if (typeof limit !== "undefined") {
-    endPoint += `&limit=${limit}`;
+  if (typeof city.limit !== "undefined") {
+    endPoint += `&limit=${city.limit}`;
   }
 
   // Add API key and units to the endpoint URL
@@ -38,16 +34,9 @@ const buildCityEndpoint = (
 };
 
 // Function to fetch city coordinates from the OpenWeatherMap API
-const fetchCoordinates = async (
-  cityName: string,
-  stateCode?: string,
-  countryCode?: string,
-  limit?: number
-): Promise<Coordinates> => {
+const fetchCoordinates = async (city: City): Promise<Coordinates> => {
   // Construct the endpoint URL
-  const response = await fetch(
-    buildCityEndpoint(cityName, stateCode, countryCode, limit)
-  );
+  const response = await fetch(buildCityEndpoint(city));
 
   // Check if the HTTP response is successful
   if (!response.ok) {

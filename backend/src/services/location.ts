@@ -2,22 +2,12 @@
 import { Coordinates } from "../types/coordinates";
 import { fetchCoordinates } from "../api/geolocation_api";
 import { validateCoordinates } from "../validation/coordinate-validation";
+import { City } from "../types/city";
 
 // Main function to get validated coordinates for a given city
-const getCoordinates = async (
-  cityName: string,
-  stateCode?: string,
-  countryCode?: string,
-  limit?: number
-): Promise<Coordinates> => {
+const getCoordinates = async (city: City): Promise<Coordinates> => {
   // Fetch coordinates for the specified city
-  const coordinates = await fetchCoordinates(
-    cityName,
-    stateCode,
-    countryCode,
-    limit
-  );
-
+  const coordinates = await fetchCoordinates(city);
   // Validate the retrieved coordinates
   return validateCoordinates(coordinates);
 };
