@@ -1,4 +1,4 @@
 import { citySchema } from "../models/city-schema";
 import { z } from "zod";
 
-export type city = z.infer<typeof citySchema>;
+export type City = z.infer<typeof citySchema>;
