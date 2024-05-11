@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Define a Zod schema for latitude and longitude coordinates
-export const coordinatesSchema = z.object({
+export const pointSchema = z.object({
   latitude: z
     .number()
     .min(-90, { message: "Latitude must be a number bigger or equal to -90" })

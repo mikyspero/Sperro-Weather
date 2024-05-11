@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkCity = exports.checkCoordinates = void 0;
 const webError_1 = require("../utils/webError");
 const http_status_1 = require("../utils/http_status");
-const coordinate_validation_1 = require("../validation/coordinate-validation");
+const point_validation_1 = require("../validation/point-validation");
 const checkCoordinates = (req, res, next) => {
     const latitudeString = req.query.latitude;
     const longitudeString = req.query.longitude;
@@ -14,7 +14,7 @@ const checkCoordinates = (req, res, next) => {
     const latitude = parseFloat(latitudeString);
     const longitude = parseFloat(longitudeString);
     try {
-        (0, coordinate_validation_1.validateCoordinates)({ latitude, longitude });
+        (0, point_validation_1.validateCoordinates)({ latitude, longitude });
         return next(); // Proceed to the next middleware or route handler
     }
     catch (error) {

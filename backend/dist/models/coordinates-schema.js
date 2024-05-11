@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.coordinatesSchema = void 0;
+exports.pointSchema = void 0;
 const zod_1 = require("zod");
 // Define a Zod schema for latitude and longitude coordinates
-exports.coordinatesSchema = zod_1.z.object({
+exports.pointSchema = zod_1.z.object({
     latitude: zod_1.z
         .number()
         .min(-90, { message: "Latitude must be a number bigger or equal to -90" })

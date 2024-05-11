@@ -11,12 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoordinates = void 0;
 const geolocation_api_1 = require("../api/geolocation_api");
-const coordinate_validation_1 = require("../validation/coordinate-validation");
+const point_validation_1 = require("../validation/point-validation");
 // Main function to get validated coordinates for a given city
 const getCoordinates = (city) => __awaiter(void 0, void 0, void 0, function* () {
     // Fetch coordinates for the specified city
     const coordinates = yield (0, geolocation_api_1.fetchCoordinates)(city);
     // Validate the retrieved coordinates
-    return (0, coordinate_validation_1.validateCoordinates)(coordinates);
+    return (0, point_validation_1.validateCoordinates)(coordinates);
 });
 exports.getCoordinates = getCoordinates;

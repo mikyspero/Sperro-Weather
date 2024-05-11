@@ -1,12 +1,12 @@
-import { Coordinates } from "../types/coordinates";
-import { coordinatesSchema } from "../models/coordinates-schema";
+import { Point } from "../types/point";
+import { pointSchema } from "../models/point-schema";
 import { newError, fromZodToWeb } from "../utils/webError";
 import { HttpStatusCodes } from "../utils/http_status";
 import { z } from "zod";
-const validateCoordinates = (toBeValidated: Coordinates): Coordinates => {
+const validateCoordinates = (toBeValidated: Point): Point => {
   // Validate the coordinates against a schema
   try {
-    coordinatesSchema.parse(toBeValidated);
+    pointSchema.parse(toBeValidated);
     return toBeValidated;
   } catch (error) {
     if (error instanceof z.ZodError) {

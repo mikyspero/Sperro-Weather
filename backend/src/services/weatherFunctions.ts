@@ -9,7 +9,7 @@ import {
   isWeatherDataValid,
   isWeatherDataArrayValid,
 } from "../validation/weather-validation";
-import { Coordinates } from "../types/coordinates";
+import { Point } from "../types/point";
 
 //a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
 //since the array on which it operates is rather small
@@ -147,7 +147,7 @@ const buildCurrentWeatherObject = (
 };
 
 const getCurrentWeather = async (
-  coordinates: Coordinates
+  coordinates: Point
 ): Promise<WeatherObject> => {
   const rawWeather: RawWeatherObject = await fetchCurrentWeatherRaw(
     coordinates
@@ -157,7 +157,7 @@ const getCurrentWeather = async (
 };
 
 const getHourlyWeather = async (
-  coordinates: Coordinates
+  coordinates: Point
 ): Promise<WeatherObject[]> => {
   const rawWeatherArray: RawWeatherObject[] = await fetchPeriodicWeather(
     coordinates
@@ -169,7 +169,7 @@ const getHourlyWeather = async (
 };
 
 const getDailyWeather = async (
-  coordinates: Coordinates
+  coordinates: Point
 ): Promise<WeatherObject[]> => {
   const weatherArray: WeatherObject[] = await getHourlyWeather(coordinates);
   const daysArray: WeatherObject[][] = await groupWeatherByDays(weatherArray);

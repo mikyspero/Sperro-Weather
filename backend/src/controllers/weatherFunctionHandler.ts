@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { coordinatesSchema } from "../models/coordinates-schema";
-import { Coordinates } from "../types/coordinates";
+import { pointSchema } from "../models/point-schema";
+import { Point } from "../types/point";
 import { WeatherObject } from "../types/weather-object";
 import { HttpStatusCodes } from "../utils/http_status";
 
@@ -9,7 +9,7 @@ const weatherFunctionHandler = async (
   res: Response,
   next: NextFunction,
   weatherFunction: (
-    coordinaates: Coordinates
+    coordinaates: Point
   ) => Promise<WeatherObject | WeatherObject[]>
 ) => {
   try {
@@ -17,7 +17,7 @@ const weatherFunctionHandler = async (
     const latitude = parseFloat(req.query.latitude as string); // Extract latitude as a number
     const longitude = parseFloat(req.query.longitude as string); // Extract longitude as a number
     // Parse the extracted values using coordinatesSchema.parse
-    const coord: Coordinates = coordinatesSchema.parse({ latitude, longitude });
+    const coord: Point = pointSchema.parse({ latitude, longitude });
     //callback to get weather data
     const weatherData = await weatherFunction(coord);
     res.status(HttpStatusCodes.OK).json(weatherData); // Send processed weather data as JSON response

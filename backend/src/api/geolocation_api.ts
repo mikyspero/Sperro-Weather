@@ -1,5 +1,5 @@
 import { newError } from "../utils/webError";
-import { Coordinates } from "../types/coordinates";
+import { Point } from "../types/point";
 import { API_KEY } from "../configs/imported_variables";
 import { HttpStatusCodes } from "../utils/http_status";
 import { City } from "../types/city";
@@ -34,7 +34,7 @@ const buildCityEndpoint = (city: City) => {
 };
 
 // Function to fetch city coordinates from the OpenWeatherMap API
-const fetchCoordinates = async (city: City): Promise<Coordinates> => {
+const fetchCoordinates = async (city: City): Promise<Point> => {
   // Construct the endpoint URL
   const response = await fetch(buildCityEndpoint(city));
 

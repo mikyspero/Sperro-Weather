@@ -1,7 +1,7 @@
 import { newError } from "../utils/webError";
 import { Request, Response, NextFunction } from "express";
 import { HttpStatusCodes } from "../utils/http_status";
-import { validateCoordinates } from "../validation/coordinate-validation";
+import { validateCoordinates } from "../validation/point-validation";
 
 
 const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
