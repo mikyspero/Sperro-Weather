@@ -31,3 +31,11 @@ const checkCity = (req, res, next) => {
     next(); // Proceed to the next middleware or route handler
 };
 exports.checkCity = checkCity;
+const checkCityRequest = (req, res, next) => {
+    const city = req.query.city_name;
+    //the remaining query parameters are optional so they can be undefined
+    const stateCode = req.query.state_code;
+    const countryCode = req.query.country_code;
+    const limit = req.query.limit;
+    next(); // Proceed to the next middleware or route handler
+};

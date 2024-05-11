@@ -1,9 +1,8 @@
 import { newError } from "../utils/webError";
-import { coordinatesSchema } from "../models/coordinates-schema";
 import { Request, Response, NextFunction } from "express";
-import { Coordinates } from "../types/coordinates";
 import { HttpStatusCodes } from "../utils/http_status";
 import { validateCoordinates } from "../validation/coordinate-validation";
+
 
 const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
   const latitudeString: string | undefined = req.query.latitude as
@@ -38,6 +37,21 @@ const checkCity = (req: Request, res: Response, next: NextFunction) => {
   if (!city) {
     next(newError("City is required", HttpStatusCodes.BAD_REQUEST));
   }
+
+  next(); // Proceed to the next middleware or route handler
+};
+
+const checkCityRequest = (req: Request, res: Response, next: NextFunction) => {
+  const city: string = req.query.city_name as string;
+  //the remaining query parameters are optional so they can be undefined
+  const stateCode: string | undefined = req.query.state_code as
+    | string
+    | undefined;
+  const countryCode: string | undefined = req.query.country_code as
+    | string
+    | undefined;
+  const limit: number | undefined = req.query.limit as number | undefined;
+
 
   next(); // Proceed to the next middleware or route handler
 };

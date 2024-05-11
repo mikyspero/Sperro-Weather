@@ -1,5 +1,7 @@
 import { newError } from "../utils/webError";
 import { HttpStatusCodes } from "../utils/http_status";
+import { cityRequestSchema } from "../models/city-request-schema";
+import { z } from "zod";
 
 const checkWeatherType = (key: string) => {
   const allowedValues = ["current", "hourly", "daily"];
@@ -13,4 +15,12 @@ const checkWeatherType = (key: string) => {
   return key;
 };
 
-export { checkWeatherType };
+const checkCity = (key:String) =>
+  z.object({
+    city_name: z.string().refine((value) => value, {
+      message: "City name is required",
+    }), // Ensure city_name is a non-empty string
+  }).parse(key);
+
+export { checkWeatherType, checkCity };
+ 
