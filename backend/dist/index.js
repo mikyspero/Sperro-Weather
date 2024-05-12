@@ -10,9 +10,9 @@ dotenv_1.default.config(); // Load environment variables from .env file
 const express_1 = __importDefault(require("express"));
 // Import CORS for enabling Cross-Origin Resource Sharing
 const cors_1 = __importDefault(require("cors"));
-const coordinate_routes_1 = require("./routes/coordinate-routes");
-const city_routes_1 = require("./routes/city-routes");
-const error_handling_1 = require("./middlewares/error-handling");
+const coordinate_routes_1 = require("./routes/coordinate_routes");
+const city_routes_1 = require("./routes/city_routes");
+const error_handling_1 = require("./middlewares/error_handling");
 const limiters_1 = require("./middlewares/limiters");
 const imported_variables_1 = require("./configs/imported_variables");
 // Define the port number to listen on, using the PORT environment variable if available,

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { cityController } from "../controllers/city-handler";
+import { cityController } from "../controllers/city_handler";
 import { checkCity } from "../middlewares/typechecking";
 
 const cityRouter = Router();

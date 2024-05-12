@@ -1,7 +1,7 @@
-import { weatherFunctionHandler } from "./weatherFunctionHandler";
-import { switchWeather } from "../services/weatherFunctions";
+import { weatherFunctionHandler } from "./weather_function_handler";
+import { switchWeather } from "../services/weather_functions";
 import { Request, Response, NextFunction } from "express";
-import { checkWeatherType } from "../validation/parameter-validation";
+import { checkWeatherType } from "../validation/parameter_validation";
 
 const getWeather = async (req: Request, res: Response, next: NextFunction) => {
   try {

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   getWeather,
-} from "../controllers/weatherController";
+} from "../controllers/weather_controller";
 import { checkCoordinates } from "../middlewares/typechecking";
 
 const weatherRouter = Router();

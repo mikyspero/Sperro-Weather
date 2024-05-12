@@ -14,7 +14,9 @@ export const cityController = async (
   try {
     //parse the city name from the query string, it's valid from middleware
     const city: City = buildCityObject(req);
+    //call the geolocation service to get the requested location coordinates
     const coordinates: Point = await getCoordinates(city);
+    //build the requested location weather url
     const queryString = new URLSearchParams([
       ["latitude", `${coordinates.latitude}`],
       ["longitude", `${coordinates.longitude}`],

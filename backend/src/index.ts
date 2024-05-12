@@ -5,9 +5,9 @@ dotenv.config(); // Load environment variables from .env file
 import express from "express";
 // Import CORS for enabling Cross-Origin Resource Sharing
 import cors from "cors";
-import { weatherRouter } from "./routes/coordinate-routes";
-import { cityRouter } from "./routes/city-routes";
-import { errorHandler } from "./middlewares/error-handling";
+import { weatherRouter } from "./routes/coordinate_routes";
+import { cityRouter } from "./routes/city_routes";
+import { errorHandler } from "./middlewares/error_handling";
 import { dailyRateLimit, minuteRateLimit } from "./middlewares/limiters";
 import { PORT as port} from "./configs/imported_variables";
 // Define the port number to listen on, using the PORT environment variable if available,

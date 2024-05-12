@@ -8,7 +8,7 @@ import { getMaxTemperature, getMinTemperature } from "../utils/weather_utils";
 import {
   isWeatherDataValid,
   isWeatherDataArrayValid,
-} from "../validation/weather-validation";
+} from "../validation/weather_validation";
 import { Point } from "../types/point";
 import { newError } from "../utils/web_error";
 import { HttpStatusCodes } from "../utils/http_status";
