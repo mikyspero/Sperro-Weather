@@ -10,6 +10,8 @@ import {
   isWeatherDataArrayValid,
 } from "../validation/weather-validation";
 import { Point } from "../types/point";
+import { newError } from "../utils/webError";
+import { HttpStatusCodes } from "../utils/http_status";
 
 //a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
 //since the array on which it operates is rather small
@@ -177,4 +179,20 @@ const getDailyWeather = async (
   return isWeatherDataArrayValid(dailyWeather);
 };
 
-export { getCurrentWeather, getHourlyWeather, getDailyWeather };
+const switchWeather = (key: string) => {
+  switch (key) {
+    case "current":
+      return getCurrentWeather;
+      break;
+    case "daily":
+      return getDailyWeather;
+      break;
+    case "hourly":
+      return getHourlyWeather;
+      break;
+    default:
+      throw newError("error", HttpStatusCodes.INTERNAL_SERVER_ERROR);
+  }
+};
+
+export {switchWeather};

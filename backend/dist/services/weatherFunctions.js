@@ -9,10 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDailyWeather = exports.getHourlyWeather = exports.getCurrentWeather = void 0;
+exports.switchWeather = void 0;
 const weather_api_1 = require("../api/weather_api");
 const weather_utils_1 = require("../utils/weather_utils");
 const weather_validation_1 = require("../validation/weather-validation");
+const webError_1 = require("../utils/webError");
+const http_status_1 = require("../utils/http_status");
 //a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
 //since the array on which it operates is rather small
 const findMostFrequentWeatherType = (weatherArray) => {
@@ -130,18 +132,31 @@ const getCurrentWeather = (coordinates) => __awaiter(void 0, void 0, void 0, fun
     const weather = yield buildCurrentWeatherObject(rawWeather);
     return (0, weather_validation_1.isWeatherDataValid)(weather);
 });
-exports.getCurrentWeather = getCurrentWeather;
 const getHourlyWeather = (coordinates) => __awaiter(void 0, void 0, void 0, function* () {
     const rawWeatherArray = yield (0, weather_api_1.fetchPeriodicWeather)(coordinates);
     const weatherArray = yield buildPeriodicWeatherArray(rawWeatherArray //await isValidWeatherDataArray(rawWeatherArray)
     );
     return (0, weather_validation_1.isWeatherDataArrayValid)(weatherArray);
 });
-exports.getHourlyWeather = getHourlyWeather;
 const getDailyWeather = (coordinates) => __awaiter(void 0, void 0, void 0, function* () {
     const weatherArray = yield getHourlyWeather(coordinates);
     const daysArray = yield groupWeatherByDays(weatherArray);
     const dailyWeather = yield fetchDailyWeather(daysArray);
     return (0, weather_validation_1.isWeatherDataArrayValid)(dailyWeather);
 });
-exports.getDailyWeather = getDailyWeather;
+const switchWeather = (key) => {
+    switch (key) {
+        case "current":
+            return getCurrentWeather;
+            break;
+        case "daily":
+            return getDailyWeather;
+            break;
+        case "hourly":
+            return getHourlyWeather;
+            break;
+        default:
+            throw (0, webError_1.newError)("error", http_status_1.HttpStatusCodes.INTERNAL_SERVER_ERROR);
+    }
+};
+exports.switchWeather = switchWeather;
