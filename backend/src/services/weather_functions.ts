@@ -1,5 +1,5 @@
-import { RawWeatherObject } from "../types/raw-weather-object";
-import { WeatherObject } from "../types/weather-object";
+import { RawWeatherObject } from "../types/raw_weather_object";
+import { WeatherObject } from "../types/weather_object";
 import {
   fetchCurrentWeatherRaw,
   fetchPeriodicWeather,
@@ -10,7 +10,7 @@ import {
   isWeatherDataArrayValid,
 } from "../validation/weather-validation";
 import { Point } from "../types/point";
-import { newError } from "../utils/webError";
+import { newError } from "../utils/web_error";
 import { HttpStatusCodes } from "../utils/http_status";
 
 //a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred

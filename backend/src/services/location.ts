@@ -1,7 +1,7 @@
 // Import necessary types, schemas, and utility functions
 import { Point } from "../types/point";
 import { fetchCoordinates } from "../api/geolocation_api";
-import { validateCoordinates } from "../validation/point-validation";
+import { validateCoordinates } from "../validation/point_validation";
 import { City } from "../types/city";
 
 // Main function to get validated coordinates for a given city

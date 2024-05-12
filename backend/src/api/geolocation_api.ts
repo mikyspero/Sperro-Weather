@@ -1,4 +1,4 @@
-import { newError } from "../utils/webError";
+import { newError } from "../utils/web_error";
 import { Point } from "../types/point";
 import { API_KEY } from "../configs/imported_variables";
 import { HttpStatusCodes } from "../utils/http_status";

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkCity = exports.checkCoordinates = void 0;
-const point_validation_1 = require("../validation/point-validation");
-const city_validation_1 = require("../validation/city-validation");
-const request_builders_1 = require("../utils/request-builders");
+const point_validation_1 = require("../validation/point_validation");
+const city_validation_1 = require("../validation/city_validation");
+const request_builders_1 = require("../utils/request_builders");
 const checkCoordinates = (req, res, next) => {
     try {
         (0, point_validation_1.validateCoordinates)({

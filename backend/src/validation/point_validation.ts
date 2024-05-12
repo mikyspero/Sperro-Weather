@@ -1,6 +1,6 @@
 import { Point } from "../types/point";
-import { pointSchema } from "../models/point-schema";
-import { newError, fromZodToWeb } from "../utils/webError";
+import { pointSchema } from "../models/point_schema";
+import { newError, fromZodToWeb } from "../utils/web_error";
 import { HttpStatusCodes } from "../utils/http_status";
 import { z } from "zod";
 const validateCoordinates = (toBeValidated: Point): Point => {

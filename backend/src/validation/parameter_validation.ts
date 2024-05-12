@@ -1,6 +1,6 @@
-import { newError } from "../utils/webError";
+import { newError } from "../utils/web_error";
 import { HttpStatusCodes } from "../utils/http_status";
-import { citySchema } from "../models/city-schema";
+import { citySchema } from "../models/city_schema";
 import { z } from "zod";
 
 const checkWeatherType = (key: string) => {

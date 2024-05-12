@@ -1,6 +1,6 @@
-import { WeatherObject } from "../types/weather-object";
-import { WeatherObjectSchema } from "../models/weather-schemas";
-import { newError } from "../utils/webError";
+import { WeatherObject } from "../types/weather_object";
+import { WeatherObjectSchema } from "../models/weather_schemas";
+import { newError } from "../utils/web_error";
 import { HttpStatusCodes } from "../utils/http_status";
 
 const isWeatherDataValid = (toBeValidated: WeatherObject): WeatherObject => {

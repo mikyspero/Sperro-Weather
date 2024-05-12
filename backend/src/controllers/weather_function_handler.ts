@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { pointSchema } from "../models/point-schema";
+import { pointSchema } from "../models/point_schema";
 import { Point } from "../types/point";
-import { WeatherObject } from "../types/weather-object";
+import { WeatherObject } from "../types/weather_object";
 import { HttpStatusCodes } from "../utils/http_status";
 
 const weatherFunctionHandler = async (

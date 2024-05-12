@@ -2,7 +2,7 @@ import { Point } from "../types/point";
 import { getCoordinates } from "../services/location";
 import { Request, Response, NextFunction } from "express";
 import { City } from "../types/city";
-import { buildCityObject } from "../utils/request-builders";
+import { buildCityObject } from "../utils/request_builders";
 
 export const cityController = async (
   req: Request,
@@ -20,7 +20,6 @@ export const cityController = async (
       ["longitude", `${coordinates.longitude}`],
     ]);
     const redirectUrl: string = `/weather/${wildcardPath}` + "?" + queryString;
-    console.log(redirectUrl);
     res.redirect(redirectUrl);
   } catch (err) {
     next(err);

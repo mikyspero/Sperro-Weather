@@ -1,5 +1,5 @@
-import { RawWeatherObject } from "../types/raw-weather-object";
-import { newError } from "../utils/webError";
+import { RawWeatherObject } from "../types/raw_weather_object";
+import { newError } from "../utils/web_error";
 import { API_KEY } from "../configs/imported_variables";
 import { HttpStatusCodes } from "../utils/http_status";
 import { Point } from "../types/point";

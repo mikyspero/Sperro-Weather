@@ -1,4 +1,4 @@
-import { RawWeatherObject } from "./raw-weather-object";
+import { RawWeatherObject } from "./raw_weather_object";
 
 export class WeatherObject {
   date: Date;

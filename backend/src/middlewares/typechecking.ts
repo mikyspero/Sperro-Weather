@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { validateCoordinates } from "../validation/point-validation";
-import { validateCity } from "../validation/city-validation";
-import { buildCityObject } from "../utils/request-builders";
+import { validateCoordinates } from "../validation/point_validation";
+import { validateCity } from "../validation/city_validation";
+import { buildCityObject } from "../utils/request_builders";
 import { City } from "../types/city";
 
 

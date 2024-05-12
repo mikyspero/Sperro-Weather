@@ -1,4 +1,4 @@
-import { WeatherObject } from "../types/weather-object";
+import { WeatherObject } from "../types/weather_object";
 
 const getMaxTemperature = (dailyWeather: WeatherObject[]) =>
     Math.max(...dailyWeather.map((element) => element.temperature.max));
