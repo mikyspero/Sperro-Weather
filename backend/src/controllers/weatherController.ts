@@ -10,7 +10,6 @@ import { checkWeatherType } from "../validation/parameter-validation";
 import { HttpStatusCodes } from "../utils/http_status";
 
 const switchWeather = (key: string) => {
-  console.log(key);
   switch (key) {
     case "current":
       return getCurrentWeather;
