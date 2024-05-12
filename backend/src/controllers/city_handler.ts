@@ -19,7 +19,7 @@ export const cityController = async (
       ["latitude", `${coordinates.latitude}`],
       ["longitude", `${coordinates.longitude}`],
     ]);
-    const redirectUrl: string = `/weather/${wildcardPath}` + "?" + queryString;
+    const redirectUrl: string = `/weather/${wildcardPath}"?"${queryString}`;
     res.redirect(redirectUrl);
   } catch (err) {
     next(err);
