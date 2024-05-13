@@ -8,10 +8,12 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install production dependencies
-RUN npm install --only=production
+RUN npm install
 
 # Copy the rest of your application code to the working directory
 COPY . .
+
+RUN npm run build
 
 # Expose the port your app runs on (inside the container)
 EXPOSE 3000
