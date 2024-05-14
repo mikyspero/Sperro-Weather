@@ -20,7 +20,8 @@ const weatherFunctionHandler = async (
     const coord: Point = pointSchema.parse({ latitude, longitude });
     //callback to get weather data
     const weatherData = await weatherFunction(coord);
-    res.status(HttpStatusCodes.OK).json(weatherData); // Send processed weather data as JSON response
+    res.status(HttpStatusCodes.OK).json(weatherData);
+    // Send processed weather data as JSON response
   } catch (error) {
     // Pass any error to the error handling middleware
     next(error);

@@ -1,7 +1,7 @@
 import { newError } from "../utils/web_error";
 import { HttpStatusCodes } from "../utils/http_status";
 import { citySchema } from "../models/city_schema";
-import { z } from "zod";
+import { z} from "zod";
 import { City } from "../types/city";
 import { fromZodToWeb } from "../utils/web_error";
 
@@ -19,5 +19,7 @@ const validateCity = (toBeVerified: City) => {
     );
   }
 };
+
+
 
 export { validateCity };

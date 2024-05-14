@@ -1,13 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { validateCoordinates } from "../validation/point_validation";
-import { validateCity } from "../validation/city_validation";
+import { validate } from "../validation/validate_schema";
+import { pointSchema } from "../models/point_schema";
+import { citySchema } from "../models/city_schema";
 import { buildCityObject } from "../utils/request_builders";
 import { City } from "../types/city";
-
+import { Point } from "../types/point";
 
 const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
   try {
-    validateCoordinates({
+    validate<Point>(pointSchema, {
       latitude: parseFloat(req.query.latitude as string),
       longitude: parseFloat(req.query.longitude as string),
     });
@@ -18,7 +19,8 @@ const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
 };
 const checkCity = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const toBeChecked: City = validateCity(buildCityObject(req));
+    //const toBeChecked: City = validateCity(buildCityObject(req));
+    const b: City = validate<City>(citySchema, buildCityObject(req));
     next();
   } catch (error) {
     next(error);

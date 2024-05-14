@@ -5,10 +5,8 @@ import {
   fetchPeriodicWeather,
 } from "../api/weather_api";
 import { getMaxTemperature, getMinTemperature } from "../utils/weather_utils";
-import {
-  isWeatherDataValid,
-  isWeatherDataArrayValid,
-} from "../validation/weather_validation";
+import { validate, validateArray } from "../validation/validate_schema";
+import { WeatherObjectSchema } from "../models/weather_schemas";
 import { Point } from "../types/point";
 import { newError } from "../utils/web_error";
 import { HttpStatusCodes } from "../utils/http_status";
@@ -155,7 +153,7 @@ const getCurrentWeather = async (
     coordinates
   );
   const weather: WeatherObject = await buildCurrentWeatherObject(rawWeather);
-  return isWeatherDataValid(weather);
+  return validate<WeatherObject>(WeatherObjectSchema, weather);
 };
 
 const getHourlyWeather = async (
@@ -167,7 +165,7 @@ const getHourlyWeather = async (
   const weatherArray: WeatherObject[] = await buildPeriodicWeatherArray(
     rawWeatherArray //await isValidWeatherDataArray(rawWeatherArray)
   );
-  return isWeatherDataArrayValid(weatherArray);
+  return validateArray<WeatherObject>(WeatherObjectSchema, weatherArray);
 };
 
 const getDailyWeather = async (
@@ -176,7 +174,7 @@ const getDailyWeather = async (
   const weatherArray: WeatherObject[] = await getHourlyWeather(coordinates);
   const daysArray: WeatherObject[][] = await groupWeatherByDays(weatherArray);
   const dailyWeather: WeatherObject[] = await fetchDailyWeather(daysArray);
-  return isWeatherDataArrayValid(dailyWeather);
+  return validateArray<WeatherObject>(WeatherObjectSchema, dailyWeather);
 };
 
 const switchWeather = (key: string) => {
@@ -195,4 +193,4 @@ const switchWeather = (key: string) => {
   }
 };
 
-export {switchWeather};
+export { switchWeather };

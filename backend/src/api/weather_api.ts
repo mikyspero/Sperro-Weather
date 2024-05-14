@@ -37,7 +37,7 @@ const fetchPeriodicWeather = async (
   }
   const weatherData = await response.json(); // Extract JSON data from the response
   const rawWeatherArray: RawWeatherObject[] = weatherData.list;
-  return rawWeatherArray; //makeWeather(weatherData) // Process weather data // Extract JSON data from the response
+  return rawWeatherArray;
 };
 
 export { fetchCurrentWeatherRaw, fetchPeriodicWeather };
