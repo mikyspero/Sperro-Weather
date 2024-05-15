@@ -22,5 +22,5 @@ const checkCity = (key:String) =>
     }), // Ensure city_name is a non-empty string
   }).parse(key);
 
-export { checkWeatherType, checkCity };
+export { checkWeatherType};
  
