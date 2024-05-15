@@ -5,23 +5,28 @@ import { citySchema } from "../models/city_schema";
 import { buildCityObject, buildPointObject } from "../utils/request_builders";
 import { City } from "../types/city";
 import { Point } from "../types/point";
+import { z } from "zod";
 
-const checkCoordinates = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    validate<Point>(pointSchema, buildPointObject(req));
-    return next(); // Proceed to the next middleware or route handler
-  } catch (error) {
-    return next(error);
-  }
+const validateRequestObject = <T>(
+  schema: z.Schema<T>,
+  buildObject: (req: Request) => T
+) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const obj = buildObject(req);
+      const validatedObj = validate(schema, obj);
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
 };
-const checkCity = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    //const toBeChecked: City = validateCity(buildCityObject(req));
-    const b: City = validate<City>(citySchema, buildCityObject(req));
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
+
+const checkCoordinates = validateRequestObject<Point>(
+  pointSchema,
+  buildPointObject
+);
+
+const checkCity = validateRequestObject<City>(citySchema, buildCityObject);
 
 export { checkCoordinates, checkCity };
