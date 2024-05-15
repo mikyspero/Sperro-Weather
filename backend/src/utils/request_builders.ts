@@ -1,5 +1,6 @@
 import { City } from "../types/city";
 import { Request } from "express";
+import { Point } from "../types/point";
 const buildCityObject = (req: Request): City => {
   return {
     //parse the city name from the query string, it's valid from middleware
@@ -11,4 +12,11 @@ const buildCityObject = (req: Request): City => {
   };
 };
 
-export { buildCityObject };
+const buildPointObject = (req: Request): Point => {
+  return {
+    latitude: parseFloat(req.query.latitude as string),
+    longitude: parseFloat(req.query.longitude as string),
+  };
+};
+
+export { buildCityObject,buildPointObject };

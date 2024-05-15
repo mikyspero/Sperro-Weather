@@ -3,6 +3,7 @@ import { switchWeather } from "../services/weather_functions";
 import { Request, Response, NextFunction } from "express";
 import { checkWeatherType } from "../validation/parameter_validation";
 
+
 const getWeather = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const key: string = checkWeatherType(

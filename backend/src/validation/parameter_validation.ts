@@ -15,12 +15,6 @@ const checkWeatherType = (key: string) => {
   return key;
 };
 
-const checkCity = (key:String) =>
-  z.object({
-    city_name: z.string().refine((value) => value, {
-      message: "City name is required",
-    }), // Ensure city_name is a non-empty string
-  }).parse(key);
 
 export { checkWeatherType};
  
