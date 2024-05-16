@@ -7,6 +7,11 @@ import { City } from "../types/city";
 const API_ROOT = `https://api.openweathermap.org/`;
 
 // Function to build the endpoint URL for city coordinates lookup
+/**
+ * Builds the endpoint URL for fetching city coordinates from the OpenWeatherMap API.
+ * @param {City} city - The city object containing cityName, stateCode, countryCode, and limit (optional).
+ * @returns {string} The complete endpoint URL with query parameters.
+ */
 const buildCityEndpoint = (city: City) => {
   // Construct the base endpoint URL
   let endPoint = `http://api.openweathermap.org/geo/1.0/direct?q=${city.cityName}`;
@@ -33,7 +38,12 @@ const buildCityEndpoint = (city: City) => {
   return endPoint;
 };
 
-// Function to fetch city coordinates from the OpenWeatherMap API
+/**
+ * Fetches coordinates (latitude and longitude) for a given city from the OpenWeatherMap API.
+ * @param {City} city - The city object containing cityName, stateCode, countryCode, and limit (optional).
+ * @returns {Promise<Point>} A Promise that resolves to a Point object containing latitude and longitude.
+ * @throws {Error} Throws an error if the fetch request fails or the response is not successful.
+ */
 const fetchCoordinates = async (city: City): Promise<Point> => {
   // Construct the endpoint URL
   const response = await fetch(buildCityEndpoint(city));
