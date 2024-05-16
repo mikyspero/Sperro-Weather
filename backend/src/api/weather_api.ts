@@ -7,8 +7,19 @@ import { Point } from "../types/point";
 const API_ROOT = `https://api.openweathermap.org/`;
 
 // Function to build the endpoint URL for city coordinates lookup
+/**
+ * Builds the endpoint URL for fetching current weather data based on coordinates.
+ * @param {Point} coordinates - The coordinates (latitude and longitude) of the location.
+ * @returns {string} The complete endpoint URL for fetching current weather data.
+ */
 const getEndpoint = (coordinates: Point) =>
   `${API_ROOT}data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${API_KEY}&units=metric`;
+/**
+ * Fetches raw weather data for the current weather based on coordinates.
+ * @param {Point} coordinates - The coordinates (latitude and longitude) of the location.
+ * @returns {Promise<RawWeatherObject>} A Promise that resolves to the raw weather data for the current weather.
+ * @throws {Error} Throws an error if the fetch request fails or the response is not successful.
+ */
 const fetchCurrentWeatherRaw = async (
   coordinates: Point
 ): Promise<RawWeatherObject> => {
@@ -24,8 +35,14 @@ const fetchCurrentWeatherRaw = async (
   return weatherData;
 };
 
+/**
+ * Fetches periodic (forecast) weather data based on coordinates.
+ * @param {Point} coordinates - The coordinates (latitude and longitude) of the location.
+ * @returns {Promise<RawWeatherObject[]>} A Promise that resolves to an array of raw weather objects representing the periodic weather forecast.
+ * @throws {Error} Throws an error if the fetch request fails or the response is not successful.
+ */
 const fetchPeriodicWeather = async (
-  coordinates:Point
+  coordinates: Point
 ): Promise<RawWeatherObject[]> => {
   const endPoint = getEndpoint(coordinates);
   const response = await fetch(endPoint); // Send request to Weather API
