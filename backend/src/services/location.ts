@@ -15,7 +15,7 @@ const getCoordinates = async (city: City): Promise<Point> => {
   // Fetch coordinates for the specified city
   const coordinates = await fetchCoordinates(city);
   // Validate the retrieved coordinates
-  return validate<Point>(pointSchema, coordinates);
+  return validate<Point>(pointSchema)(coordinates);
 };
 
 // Export the main function to retrieve validated coordinates

@@ -14,7 +14,7 @@ const validateRequestObject = <T>(
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       const obj = buildObject(req);
-      const validatedObj = validate(schema, obj);
+      const validatedObj = validate(schema)(obj);
       next();
     } catch (error) {
       next(error);

@@ -158,7 +158,7 @@ const getCurrentWeather = async (
     coordinates
   );
   const weather: WeatherObject = await buildCurrentWeatherObject(rawWeather);
-  return validate<WeatherObject>(WeatherObjectSchema, weather);
+  return validate<WeatherObject>(WeatherObjectSchema)(weather);
 };
 
 /**

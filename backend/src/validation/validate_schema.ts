@@ -12,7 +12,7 @@ import { fromZodToWeb } from "../utils/web_error";
  * @returns The validated object if validation succeeds.
  * @throws Custom web error if validation fails.
  */
-const validate = <T>(schema: z.Schema<T>, toBeVerified: T): T => {
+const validate2 = <T>(schema: z.Schema<T>, toBeVerified: T): T => {
   try {
     // Attempt to parse the object against the Zod schema.
     return schema.parse(toBeVerified);
@@ -29,6 +29,24 @@ const validate = <T>(schema: z.Schema<T>, toBeVerified: T): T => {
   }
 };
 
+const validate = <T>(schema: z.Schema<T>) => {
+  return (toBeVerified: T): T => {
+    try {
+      // Attempt to parse the object against the Zod schema.
+      return schema.parse(toBeVerified);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        // If a ZodError is caught, convert it to a custom web error.
+        throw fromZodToWeb(error);
+      }
+      // If any other error occurs, throw a generic internal server error.
+      throw newError(
+        "unknown error verifying requested data",
+        HttpStatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  };
+};
 /**
  * Validates an array of objects against a Zod schema.
  * @param schema - Zod schema to validate against.
@@ -37,7 +55,7 @@ const validate = <T>(schema: z.Schema<T>, toBeVerified: T): T => {
  */
 const validateArray = <T>(schema: z.Schema<T>, toBeVerified: T[]): T[] => {
   // Map through each object in the array and validate it using the 'validate' function.
-  return toBeVerified.map((value: T) => validate(schema, value));
+  return toBeVerified.map((value: T) => validate2(schema, value));
 };
 
 // Export the 'validate' and 'validateArray' functions for use in other modules.
