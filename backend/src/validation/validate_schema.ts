@@ -55,9 +55,8 @@ const validate = <T>(schema: z.Schema<T>) => {
  */
 const validateArray = <T>(schema: z.Schema<T>, toBeVerified: T[]): T[] => {
   // Map through each object in the array and validate it using the 'validate' function.
-  return toBeVerified.map((value: T) => validate2(schema, value));
+  return toBeVerified.map((value: T) => validate(schema)(value));
 };
 
 // Export the 'validate' and 'validateArray' functions for use in other modules.
 export { validate, validateArray };
-
