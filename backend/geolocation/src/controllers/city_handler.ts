@@ -3,6 +3,7 @@ import { getCoordinates } from "../services/location";
 import { Request, Response, NextFunction } from "express";
 import { City } from "../types/city";
 import { buildCityObject } from "../utils/request_builders";
+import {WEATHER_PORT} from "../configs/imported_variables";
 
 /**
  * Handles requests to the city controller.
@@ -29,7 +30,8 @@ export const cityController = async (
       ["latitude", `${coordinates.latitude}`],
       ["longitude", `${coordinates.longitude}`],
     ]);
-    const redirectUrl: string = `/weather/${wildcardPath}?${queryString}`;
+    // Construct the new URL with a different port
+    const redirectUrl: string = `http://localhost:${WEATHER_PORT}/weather/${wildcardPath}?${queryString}`;
     res.redirect(redirectUrl);
   } catch (err) {
     next(err);

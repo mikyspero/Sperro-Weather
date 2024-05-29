@@ -5,7 +5,6 @@ dotenv.config(); // Load environment variables from .env file
 import express from "express";
 // Import CORS for enabling Cross-Origin Resource Sharing
 import cors from "cors";
-import { weatherRouter } from "./routes/coordinate_routes";
 import { cityRouter } from "./routes/city_routes";
 import { errorHandler } from "./middlewares/error_handling";
 import { dailyRateLimit, minuteRateLimit } from "./middlewares/limiters";
@@ -23,8 +22,6 @@ app.use(cors({ methods: ["GET"] }));
 // Middleware to limit the requests from the same ip
 app.use(minuteRateLimit);
 app.use(dailyRateLimit);
-
-app.use("/weather", weatherRouter);
 app.use("/city", cityRouter);
 //middleware to Send an appropriate error response to the client
 app.use(errorHandler);
