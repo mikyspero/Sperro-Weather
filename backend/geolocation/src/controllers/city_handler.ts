@@ -25,18 +25,7 @@ export const cityController = async (
     const city: City = buildCityObject(req);
     //call the geolocation service to get the requested location coordinates
     const coordinates: Point = await getCoordinates(city);
-    //build the requested location weather url
-    const queryString = new URLSearchParams([
-      ["latitude", `${coordinates.latitude}`],
-      ["longitude", `${coordinates.longitude}`],
-    ]);
-    // Construct the new URL with a different port
-    const weatherServiceUrl: string = `http://localhost:${WEATHER_PORT}/weather/${wildcardPath}?${queryString}`;
-    const response = await fetch(weatherServiceUrl);
-    const data = await response.json();
-
-    res.json(data);
-
+    res.json(coordinates);
   } catch (err) {
     next(err);
   }

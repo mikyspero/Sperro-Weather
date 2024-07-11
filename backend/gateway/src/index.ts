@@ -8,8 +8,7 @@ import express from "express";
 import cors from "cors";
 import {errorHandler} from "./middlewares/error_handling";
 import {dailyRateLimit, minuteRateLimit} from "./middlewares/limiters";
-import { ParsedQs } from 'qs';
-import {PORT as port} from "./config/imported_variables";
+import {PORT as port, WEATHER_PORT} from "./config/imported_variables";
 import qs from "qs";
 
 const CITY_SERVICE_URL = `http://localhost:3001/city`; // URL of the city microservice
@@ -33,17 +32,24 @@ app.use(dailyRateLimit);
 
 app.get('/city/:weatherRoute', async (req, res, next) => {
     try {
-        const q = req.query;
-        const queryString = qs.stringify(q);
+        const queryString = qs.stringify(req.query);
         const url = `${CITY_SERVICE_URL}/${req.params.weatherRoute}?${queryString}`;
-        console.log(url);
 
         const response = await fetch(url);
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            next(new Error('Network response was not ok'));
         }
 
-        const data = await response.json();
+        const coordinates = await response.json();
+        //build the requested location weather url
+        const coordinatesQueryString = new URLSearchParams([
+            ["latitude", `${coordinates.latitude}`],
+            ["longitude", `${coordinates.longitude}`],
+        ]);
+        // Construct the new URL with a different port
+        const response2 = await fetch(`${WEATHER_SERVICE_URL}/${req.params.weatherRoute}?${coordinatesQueryString}`);
+        const data = await response2.json();
+
         res.json(data);
     } catch (error) {
         next(error);
@@ -58,7 +64,7 @@ try {
     const queryString = qs.stringify(q);
     const response = await fetch(`${WEATHER_SERVICE_URL}/${req.params.weather}?${queryString}`);
     if (!response.ok) {
-        throw new Error('Network response was not ok');
+        next(new Error('Network response was not ok'));
     }
     const data = await response.json(); // Use response.json() if the response is in JSON format
     res.send(data);
