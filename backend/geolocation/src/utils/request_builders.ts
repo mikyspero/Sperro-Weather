@@ -1,6 +1,8 @@
 import { City } from "../types/city";
 import { Request } from "express";
 import { Point } from "../types/point";
+
+//from query
 const buildCityObject = (req: Request): City => {
   return {
     //parse the city name from the query string, it's valid from middleware

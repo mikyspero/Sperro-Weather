@@ -1,4 +1,4 @@
-import { WebError, newError } from "./web_error";
+import { WebError } from "./web_error";
 
 const isLeapYear = (year: number): boolean => {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -22,7 +22,7 @@ const getMonth = (monthCode: number) => {
   if (monthCode >= 0 && monthCode <= 11) {
     return months[monthCode];
   } else {
-    throw newError("invalid month coding", 500); // Throw an error for invalid month code
+    throw WebError.createError("invalid month coding", 500); // Throw an error for invalid month code
   }
 };
 

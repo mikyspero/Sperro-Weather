@@ -31,8 +31,12 @@ export const cityController = async (
       ["longitude", `${coordinates.longitude}`],
     ]);
     // Construct the new URL with a different port
-    const redirectUrl: string = `http://localhost:${WEATHER_PORT}/weather/${wildcardPath}?${queryString}`;
-    res.redirect(redirectUrl);
+    const weatherServiceUrl: string = `http://localhost:${WEATHER_PORT}/weather/${wildcardPath}?${queryString}`;
+    const response = await fetch(weatherServiceUrl);
+    const data = await response.json();
+
+    res.json(data);
+
   } catch (err) {
     next(err);
   }

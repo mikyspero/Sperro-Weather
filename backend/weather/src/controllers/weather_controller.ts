@@ -8,7 +8,7 @@ const getWeather = async (req: Request, res: Response, next: NextFunction) => {
     const key: string = checkWeatherType(
       req.params["weather"].trim().toLocaleLowerCase()
     );
-    (await weatherFunctionHandler(switchWeather(key)))(req, res, next);
+    await (await weatherFunctionHandler(switchWeather(key)))(req, res, next);
   } catch (error) {
     next(error);
   }

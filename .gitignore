@@ -2,7 +2,7 @@
 node_modules/
 
 # Ignore the contents of the dist directory
-backend/dist/*/*.js
+backend/*/dist/*/*.js
 
 # Ignore the contents of the .env
 .env

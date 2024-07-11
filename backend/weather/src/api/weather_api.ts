@@ -1,8 +1,8 @@
 import { RawWeatherObject } from "../types/raw_weather_object";
-import { newError } from "../utils/web_error";
 import { API_KEY } from "../configs/imported_variables";
 import { HttpStatusCodes } from "../utils/http_status";
 import { Point } from "../types/point";
+import {WebError} from "../utils/web_error";
 
 const API_ROOT = `https://api.openweathermap.org/`;
 
@@ -14,6 +14,18 @@ const API_ROOT = `https://api.openweathermap.org/`;
  */
 const getEndpoint = (coordinates: Point) =>
   `${API_ROOT}data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${API_KEY}&units=metric`;
+
+const fetchDataFromApi = async <T>(endPoint:string):Promise<T>=>{
+  const response = await fetch(endPoint); // Send request to Weather API
+  if (!response.ok) {
+    throw WebError.createError(
+        "Failed to fetch the requested data",
+        HttpStatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+  const data:T = await response.json();
+  return data;
+}
 /**
  * Fetches raw weather data for the current weather based on coordinates.
  * @param {Point} coordinates - The coordinates (latitude and longitude) of the location.
@@ -26,7 +38,7 @@ const fetchCurrentWeatherRaw = async (
   const endPoint = `${API_ROOT}data/2.5/weather?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${API_KEY}&units=metric`;
   const response = await fetch(endPoint); // Send request to Weather API
   if (!response.ok) {
-    throw newError(
+    throw WebError.createError(
       "Failed to fetch weather data",
       HttpStatusCodes.INTERNAL_SERVER_ERROR
     );
@@ -47,7 +59,7 @@ const fetchPeriodicWeather = async (
   const endPoint = getEndpoint(coordinates);
   const response = await fetch(endPoint); // Send request to Weather API
   if (!response.ok) {
-    throw newError(
+    throw WebError.createError(
       "Failed to fetch weather data",
       HttpStatusCodes.INTERNAL_SERVER_ERROR
     );

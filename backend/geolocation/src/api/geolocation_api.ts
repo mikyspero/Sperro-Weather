@@ -1,4 +1,4 @@
-import { newError } from "../utils/web_error";
+import { WebError } from "../utils/web_error";
 import { Point } from "../types/point";
 import { API_KEY } from "../configs/imported_variables";
 import { HttpStatusCodes } from "../utils/http_status";
@@ -50,7 +50,7 @@ const fetchCoordinates = async (city: City): Promise<Point> => {
 
   // Check if the HTTP response is successful
   if (!response.ok) {
-    throw newError(
+    throw WebError.createError(
       "Failed to fetch location data",
       HttpStatusCodes.INTERNAL_SERVER_ERROR
     ); // Throw an error if response status is not OK

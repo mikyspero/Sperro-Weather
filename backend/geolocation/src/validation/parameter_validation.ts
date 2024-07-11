@@ -1,4 +1,4 @@
-import { newError } from "../utils/web_error";
+import { WebError } from "../utils/web_error";
 import { HttpStatusCodes } from "../utils/http_status";
 
 const checkWeatherType = (key: string) => {
@@ -8,7 +8,7 @@ const checkWeatherType = (key: string) => {
     key !== allowedValues[1] &&
     key !== allowedValues[2]
   ) {
-    throw newError("Invalid Url", HttpStatusCodes.FORBIDDEN);
+    throw WebError.createError("Invalid Url", HttpStatusCodes.FORBIDDEN);
   }
   return key;
 };

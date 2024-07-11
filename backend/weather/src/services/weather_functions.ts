@@ -1,15 +1,15 @@
-import { RawWeatherObject } from "../types/raw_weather_object";
-import { WeatherObject } from "../types/weather_object";
+import {RawWeatherObject} from "../types/raw_weather_object";
+import {WeatherObject} from "../types/weather_object";
 import {
-  fetchCurrentWeatherRaw,
-  fetchPeriodicWeather,
+    fetchCurrentWeatherRaw,
+    fetchPeriodicWeather,
 } from "../api/weather_api";
-import { getMaxTemperature, getMinTemperature } from "../utils/weather_utils";
-import { validate, validateArray } from "../validation/validate_schema";
-import { WeatherObjectSchema } from "../models/weather_schemas";
-import { Point } from "../types/point";
-import { newError } from "../utils/web_error";
-import { HttpStatusCodes } from "../utils/http_status";
+import {getMaxTemperature, getMinTemperature} from "../utils/weather_utils";
+import {validate, validateArray} from "../validation/validate_schema";
+import {WeatherObjectSchema} from "../models/weather_schemas";
+import {Point} from "../types/point";
+import {WebError} from "../utils/web_error";
+import {HttpStatusCodes} from "../utils/http_status";
 
 //a more comprehensible but less efficient version of findMostFrequentWeatherType was preferred
 //since the array on which it operates is rather small
@@ -19,30 +19,28 @@ import { HttpStatusCodes } from "../utils/http_status";
  * @returns {string} The most frequent weather type found in the array.
  */
 const findMostFrequentWeatherType = (weatherArray: WeatherObject[]): string => {
-  // Count occurrences of each weather type using reduce creating an array of objects
-  const weatherCount = weatherArray.reduce(
-    (countMap: { [key: string]: number }, weatherObj) => {
-      const mainWeather = weatherObj.weather.main;
-      countMap[mainWeather] = (countMap[mainWeather] || 0) + 1;
-      return countMap;
-    },
-    {}
-  );
-  // Check if weatherCount is empty
-  if (Object.keys(weatherCount).length === 0) {
-    return "";
-  }
-  // Initialize mostLikely with the first weather type
-  const firstWeatherType = Object.keys(weatherCount)[0];
-  //compare each object finding the one whose numerical value is the biggest
-  return Object.keys(weatherCount).reduce(
-    (mostLikely: string, weatherType: string) => {
-      return weatherCount[mostLikely] < weatherCount[weatherType]
-        ? weatherType
-        : mostLikely;
-    },
-    firstWeatherType
-  );
+    // Count occurrences of each weather type using reduce creating an array of objects
+    const weatherCount = weatherArray.reduce(
+        (countMap: { [key: string]: number }, weatherObj) => {
+            const mainWeather = weatherObj.weather.main;
+            countMap[mainWeather] = (countMap[mainWeather] || 0) + 1;
+            return countMap;
+        },
+        {}
+    );
+    // Check if weatherCount is empty
+    if (Object.keys(weatherCount).length === 0) {
+        return "";
+    }
+    //compare each object finding the one whose numerical value is the biggest
+    return Object.keys(weatherCount).reduce(
+        (mostLikely: string, weatherType: string) => {
+            return weatherCount[mostLikely] < weatherCount[weatherType]
+                ? weatherType
+                : mostLikely;
+        },
+        Object.keys(weatherCount)[0]
+    );
 };
 /**
  * Builds an array of WeatherObject from an array of RawWeatherObject.
@@ -50,30 +48,30 @@ const findMostFrequentWeatherType = (weatherArray: WeatherObject[]): string => {
  * @returns {WeatherObject[]} An array of WeatherObject constructed from the raw weather data.
  */
 const buildPeriodicWeatherArray = (
-  rawWeatherData: RawWeatherObject[]
+    rawWeatherData: RawWeatherObject[]
 ): WeatherObject[] => {
-  return rawWeatherData.map((rawWeatherObject: RawWeatherObject) => {
-    const date = new Date(rawWeatherObject.dt * 1000); // Convert UNIX timestamp to Date object
+    return rawWeatherData.map((rawWeatherObject: RawWeatherObject) => {
+        const date = new Date(rawWeatherObject.dt * 1000); // Convert UNIX timestamp to Date object
 
-    return {
-      date: date, // Assign the Date object directly
-      weather: {
-        main: rawWeatherObject.weather[0]?.main || "", // Get the main weather condition
-        description: rawWeatherObject.weather[0]?.description || "", // Get the weather description
-      },
-      temperature: {
-        average: rawWeatherObject.main.temp,
-        min: rawWeatherObject.main.temp_min,
-        max: rawWeatherObject.main.temp_max,
-      },
-      humidity: rawWeatherObject.main.humidity,
-      pressure: rawWeatherObject.main.pressure,
-      wind: {
-        speed: rawWeatherObject.wind.speed,
-        direction: rawWeatherObject.wind.deg,
-      },
-    };
-  });
+        return {
+            date: date, // Assign the Date object directly
+            weather: {
+                main: rawWeatherObject.weather[0]?.main || "", // Get the main weather condition
+                description: rawWeatherObject.weather[0]?.description || "", // Get the weather description
+            },
+            temperature: {
+                average: rawWeatherObject.main.temp,
+                min: rawWeatherObject.main.temp_min,
+                max: rawWeatherObject.main.temp_max,
+            },
+            humidity: rawWeatherObject.main.humidity,
+            pressure: rawWeatherObject.main.pressure,
+            wind: {
+                speed: rawWeatherObject.wind.speed,
+                direction: rawWeatherObject.wind.deg,
+            },
+        };
+    });
 };
 /**
  * Groups WeatherObject array by days based on date.
@@ -81,22 +79,22 @@ const buildPeriodicWeatherArray = (
  * @returns {WeatherObject[][]} An array of WeatherObject arrays, each representing weather data for a day.
  */
 const groupWeatherByDays = (
-  forecastData: WeatherObject[]
+    forecastData: WeatherObject[]
 ): WeatherObject[][] => {
-  let dayIndex = 0;
-  return forecastData.reduce(
-    (daysArray: WeatherObject[][], element: WeatherObject, index: number) => {
-      if (
-        index !== 0 &&
-        element.date.getDate() !== forecastData[index - 1].date.getDate()
-      ) {
-        dayIndex++;
-      }
-      daysArray[dayIndex] = [...(daysArray[dayIndex] ?? []), element];
-      return daysArray;
-    },
-    []
-  );
+    let dayIndex = 0;
+    return forecastData.reduce(
+        (daysArray: WeatherObject[][], element: WeatherObject, index: number) => {
+            if (
+                index !== 0 &&
+                element.date.getDate() !== forecastData[index - 1].date.getDate()
+            ) {
+                dayIndex++;
+            }
+            daysArray[dayIndex] = [...(daysArray[dayIndex] ?? []), element];
+            return daysArray;
+        },
+        []
+    );
 };
 /**
  * Constructs an array of WeatherObject representing daily weather data from an array of hourly weather data grouped by days.
@@ -104,19 +102,19 @@ const groupWeatherByDays = (
  * @returns {WeatherObject[]} An array of WeatherObject containing daily weather data.
  */
 const fetchDailyWeather = (daysArray: WeatherObject[][]): WeatherObject[] => {
-  return daysArray.map((weatherArray: WeatherObject[]) => {
-    return {
-      date: weatherArray[0].date,
-      weather: {
-        main: findMostFrequentWeatherType(weatherArray),
-        description: "",
-      },
-      temperature: {
-        min: getMinTemperature(weatherArray),
-        max: getMaxTemperature(weatherArray),
-      },
-    };
-  });
+    return daysArray.map((weatherArray: WeatherObject[]) => {
+        return {
+            date: weatherArray[0].date,
+            weather: {
+                main: findMostFrequentWeatherType(weatherArray),
+                description: "",
+            },
+            temperature: {
+                min: getMinTemperature(weatherArray),
+                max: getMaxTemperature(weatherArray),
+            },
+        };
+    });
 };
 /**
  * Constructs a WeatherObject from a RawWeatherObject, mapping relevant properties.
@@ -124,26 +122,26 @@ const fetchDailyWeather = (daysArray: WeatherObject[][]): WeatherObject[] => {
  * @returns {WeatherObject} The constructed WeatherObject containing formatted weather data.
  */
 const buildCurrentWeatherObject = (
-  rawWeather: RawWeatherObject
+    rawWeather: RawWeatherObject
 ): WeatherObject => {
-  return {
-    date: new Date(),
-    weather: {
-      main: rawWeather.weather[0]?.main || "", // Get the main weather condition
-      description: rawWeather.weather[0]?.description || "", // Get the weather description
-    },
-    temperature: {
-      average: rawWeather.main.temp,
-      min: rawWeather.main.temp_min,
-      max: rawWeather.main.temp_max,
-    },
-    humidity: rawWeather.main.humidity,
-    pressure: rawWeather.main.pressure,
-    wind: {
-      speed: rawWeather.wind.speed,
-      direction: rawWeather.wind.deg,
-    },
-  };
+    return {
+        date: new Date(),
+        weather: {
+            main: rawWeather.weather[0]?.main || "", // Get the main weather condition
+            description: rawWeather.weather[0]?.description || "", // Get the weather description
+        },
+        temperature: {
+            average: rawWeather.main.temp,
+            min: rawWeather.main.temp_min,
+            max: rawWeather.main.temp_max,
+        },
+        humidity: rawWeather.main.humidity,
+        pressure: rawWeather.main.pressure,
+        wind: {
+            speed: rawWeather.wind.speed,
+            direction: rawWeather.wind.deg,
+        },
+    };
 };
 /**
  * Fetches the current weather data for a specific location.
@@ -152,13 +150,13 @@ const buildCurrentWeatherObject = (
  * @throws {Error} Throws an error if the fetch request fails or the response is not successful.
  */
 const getCurrentWeather = async (
-  coordinates: Point
+    coordinates: Point
 ): Promise<WeatherObject> => {
-  const rawWeather: RawWeatherObject = await fetchCurrentWeatherRaw(
-    coordinates
-  );
-  const weather: WeatherObject = await buildCurrentWeatherObject(rawWeather);
-  return validate<WeatherObject>(WeatherObjectSchema)(weather);
+    const rawWeather: RawWeatherObject = await fetchCurrentWeatherRaw(
+        coordinates
+    );
+    const weather: WeatherObject = buildCurrentWeatherObject(rawWeather);
+    return validate<WeatherObject>(WeatherObjectSchema)(weather);
 };
 
 /**
@@ -168,15 +166,15 @@ const getCurrentWeather = async (
  * @throws {Error} Throws an error if the fetch request fails or the response is not successful.
  */
 const getHourlyWeather = async (
-  coordinates: Point
+    coordinates: Point
 ): Promise<WeatherObject[]> => {
-  const rawWeatherArray: RawWeatherObject[] = await fetchPeriodicWeather(
-    coordinates
-  );
-  const weatherArray: WeatherObject[] = await buildPeriodicWeatherArray(
-    rawWeatherArray //await isValidWeatherDataArray(rawWeatherArray)
-  );
-  return validateArray<WeatherObject>(WeatherObjectSchema, weatherArray);
+    const rawWeatherArray: RawWeatherObject[] = await fetchPeriodicWeather(
+        coordinates
+    );
+    const weatherArray: WeatherObject[] = buildPeriodicWeatherArray(
+        rawWeatherArray //await isValidWeatherDataArray(rawWeatherArray)
+    );
+    return validateArray<WeatherObject>(WeatherObjectSchema, weatherArray);
 };
 
 /**
@@ -186,12 +184,12 @@ const getHourlyWeather = async (
  * @throws {Error} Throws an error if the fetch request fails or the response is not successful.
  */
 const getDailyWeather = async (
-  coordinates: Point
+    coordinates: Point
 ): Promise<WeatherObject[]> => {
-  const weatherArray: WeatherObject[] = await getHourlyWeather(coordinates);
-  const daysArray: WeatherObject[][] = await groupWeatherByDays(weatherArray);
-  const dailyWeather: WeatherObject[] = await fetchDailyWeather(daysArray);
-  return validateArray<WeatherObject>(WeatherObjectSchema, dailyWeather);
+    const weatherArray: WeatherObject[] = await getHourlyWeather(coordinates);
+    const daysArray: WeatherObject[][] = groupWeatherByDays(weatherArray);
+    const dailyWeather: WeatherObject[] = fetchDailyWeather(daysArray);
+    return validateArray<WeatherObject>(WeatherObjectSchema, dailyWeather);
 };
 
 /**
@@ -201,19 +199,16 @@ const getDailyWeather = async (
  * @throws {Error} Throws an error if the key is not recognized.
  */
 const switchWeather = (key: string) => {
-  switch (key) {
-    case "current":
-      return getCurrentWeather;
-      break;
-    case "daily":
-      return getDailyWeather;
-      break;
-    case "hourly":
-      return getHourlyWeather;
-      break;
-    default:
-      throw newError("error", HttpStatusCodes.INTERNAL_SERVER_ERROR);
-  }
+    switch (key) {
+        case "current":
+            return getCurrentWeather;
+        case "daily":
+            return getDailyWeather;
+        case "hourly":
+            return getHourlyWeather;
+        default:
+            throw WebError.createError("error", HttpStatusCodes.INTERNAL_SERVER_ERROR);
+    }
 };
 
-export { switchWeather };
+export {switchWeather};
