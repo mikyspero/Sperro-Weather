@@ -7,7 +7,6 @@ import express from "express";
 import cors from "cors";
 import { cityRouter } from "./routes/city_routes";
 import { errorHandler } from "./middlewares/error_handling";
-import { dailyRateLimit, minuteRateLimit } from "./middlewares/limiters";
 import { PORT as port} from "./configs/imported_variables";
 // Define the port number to listen on, using the PORT environment variable if available,
 // or default to 3000
@@ -20,8 +19,6 @@ app.use(express.json());
 //block every non GET request
 app.use(cors({ methods: ["GET"] }));
 // Middleware to limit the requests from the same ip
-app.use(minuteRateLimit);
-app.use(dailyRateLimit);
 app.use("/city", cityRouter);
 //middleware to Send an appropriate error response to the client
 app.use(errorHandler);

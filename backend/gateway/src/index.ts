@@ -35,20 +35,20 @@ app.get('/city/:weatherRoute', async (req, res, next) => {
         const queryString = qs.stringify(req.query);
         const url = `${CITY_SERVICE_URL}/${req.params.weatherRoute}?${queryString}`;
 
-        const response = await fetch(url);
-        if (!response.ok) {
+        const coordinatesResponse = await fetch(url);
+        if (!coordinatesResponse.ok) {
             next(new Error('Network response was not ok'));
         }
 
-        const coordinates = await response.json();
+        const coordinates = await coordinatesResponse.json();
         //build the requested location weather url
         const coordinatesQueryString = new URLSearchParams([
             ["latitude", `${coordinates.latitude}`],
             ["longitude", `${coordinates.longitude}`],
         ]);
         // Construct the new URL with a different port
-        const response2 = await fetch(`${WEATHER_SERVICE_URL}/${req.params.weatherRoute}?${coordinatesQueryString}`);
-        const data = await response2.json();
+        const weatherResponse = await fetch(`${WEATHER_SERVICE_URL}/${req.params.weatherRoute}?${coordinatesQueryString}`);
+        const data = await weatherResponse.json();
 
         res.json(data);
     } catch (error) {
