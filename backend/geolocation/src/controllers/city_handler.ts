@@ -18,7 +18,6 @@ export const cityController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const wildcardPath: string = req.params["weatherRoute"];
   // Build the new URL where you want to redirect
   try {
     //parse the city name from the query string, it's valid from middleware

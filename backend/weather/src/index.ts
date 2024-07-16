@@ -8,6 +8,7 @@ import cors from "cors";
 import { weatherRouter } from "./routes/coordinate_routes";
 import { errorHandler } from "./middlewares/error_handling";
 import { PORT as port} from "./configs/imported_variables";
+import {getWeather, getWeatherForFrontEnd} from "./controllers/weather_controller";
 // Define the port number to listen on, using the PORT environment variable if available,
 // or default to 3000
 //console.log(process.env); // Check all loaded environment variables
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(cors({ methods: ["GET"] }));
 // Middleware to limit the requests from the same ip
 app.use("/weather", weatherRouter);
+app.get("/",getWeatherForFrontEnd);
 //middleware to Send an appropriate error response to the client
 app.use(errorHandler);
 // Start the Express server and listen for incoming requests on the specified port

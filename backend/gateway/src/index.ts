@@ -10,9 +10,10 @@ import {errorHandler} from "./middlewares/error_handling";
 import {dailyRateLimit, minuteRateLimit} from "./middlewares/limiters";
 import {PORT as port, WEATHER_PORT} from "./config/imported_variables";
 import qs from "qs";
+import {buildCityObject} from "./utils/builders_from_request";
 
 const CITY_SERVICE_URL = `http://localhost:3001/city`; // URL of the city microservice
-const WEATHER_SERVICE_URL = 'http://localhost:3000/weather'; // URL of the weather microservice
+const WEATHER_SERVICE_URL = 'http://localhost:3000'; // URL of the weather microservice
 
 
 // Define the port number to listen on, using the PORT environment variable if available,
@@ -55,6 +56,41 @@ app.get('/city/:weatherRoute', async (req, res, next) => {
         next(error);
     }
 });
+
+app.get('/weatherfull', async (req, res, next) => {
+    try {
+        const queryString = qs.stringify(req.query);
+        const url = `${CITY_SERVICE_URL}?${queryString}`;
+        console.log(url);
+        const coordinatesResponse = await fetch(url);
+        if (!coordinatesResponse.ok) {
+            next(new Error('Network response was not ok'));
+        }
+        const requestedCity = buildCityObject(req);
+        const coordinates = await coordinatesResponse.json();
+        //build the requested location weather url
+        const coordinatesQueryString = new URLSearchParams([
+            ["latitude", `${coordinates.latitude}`],
+            ["longitude", `${coordinates.longitude}`],
+        ]);
+        console.log(`${WEATHER_SERVICE_URL}/?${coordinatesQueryString}`)
+        // Construct the new URL with a different port
+        const weatherResponse = await fetch(`${WEATHER_SERVICE_URL}/?${coordinatesQueryString}`);
+        const data = await weatherResponse.json();
+        const tbr ={
+            city:requestedCity,
+            weather:data,
+        };
+        res.json(tbr);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
+
+
 
 
 // Endpoint to fetch data from the weather microservice

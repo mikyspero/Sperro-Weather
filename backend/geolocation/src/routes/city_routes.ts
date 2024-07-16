@@ -6,6 +6,6 @@ const cityRouter = Router();
 //mount middleware for coordinates validation
 cityRouter.use(checkCity);
 //more will come...
-cityRouter.get("/:weatherRoute", cityController);
+cityRouter.get("/", cityController);
 
 export { cityRouter };

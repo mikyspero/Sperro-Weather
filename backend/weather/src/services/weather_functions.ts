@@ -211,4 +211,17 @@ const switchWeather = (key: string) => {
     }
 };
 
-export {switchWeather};
+const getFullWeather = async (coordinates:Point):Promise<any>=>{
+    const currentWeather = await getCurrentWeather(coordinates);
+    const hourlyWeather:WeatherObject[] = await getHourlyWeather(coordinates);
+    const daysArray: WeatherObject[][] = groupWeatherByDays(hourlyWeather);
+    const dailyWeather: WeatherObject[] = validateArray<WeatherObject>(WeatherObjectSchema, fetchDailyWeather(daysArray));
+    return {
+        current: currentWeather,
+        daily: dailyWeather,
+        hourly: hourlyWeather
+    }
+}
+
+
+export {switchWeather,getFullWeather};
