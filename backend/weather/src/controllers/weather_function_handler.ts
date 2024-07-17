@@ -1,26 +1,37 @@
-import {Request, Response, NextFunction} from "express";
-import {pointSchema} from "../models/point_schema";
-import {Point} from "../types/point";
-import {WeatherObject} from "../types/weather_object";
-import {HttpStatusCodes} from "../utils/http_status";
-import {buildPointObject} from "../utils/request_builders";
-import {FullWeather} from "../types/full_weather";
+import { Request, Response, NextFunction } from "express";
+import { pointSchema } from "../models/point_schema";
+import { Point } from "../types/point";
+import { WeatherObject } from "../types/weather_object";
+import { HttpStatusCodes } from "../utils/http_status";
+import { buildPointObject } from "../utils/request_builders";
+import { FullWeather } from "../types/full_weather";
 
+/**
+ * Higher-order function that creates an Express middleware for handling weather-related requests.
+ * It abstracts common logic for different types of weather data fetching.
+ *
+ * @param {Function} weatherFunction - A function that takes coordinates and returns weather data.
+ * @returns {Function} An Express middleware function.
+ */
 const weatherFunctionHandler = async (
-    weatherFunction: (coordinates: Point) => Promise<WeatherObject | WeatherObject[]| FullWeather>) => {
+    weatherFunction: (coordinates: Point) => Promise<WeatherObject | WeatherObject[] | FullWeather>
+) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
-            //Extract latitude and longitude from the query string they have already been validated
-            // Parse the extracted values using coordinatesSchema.parse
+            // Extract and validate coordinates from the request
+            // The buildPointObject function is assumed to extract lat/lon from the request
             const coord: Point = pointSchema.parse(buildPointObject(req));
-            //callback to get weather data
+
+            // Call the provided weather function with the validated coordinates
             const weatherData = await weatherFunction(coord);
+
+            // Send the weather data as a JSON response with a 200 OK status
             res.status(HttpStatusCodes.OK).json(weatherData);
-            // Send processed weather data as JSON response
         } catch (error) {
-            // Pass any error to the error handling middleware
+            // If any error occurs (including validation errors), pass it to the error handling middleware
             next(error);
         }
     };
 };
-export {weatherFunctionHandler};
+
+export { weatherFunctionHandler };
