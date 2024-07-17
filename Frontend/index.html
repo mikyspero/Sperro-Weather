@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SperroWeather</title>
-  <!-- Include Tailwind CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="dist/styles.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
 
@@ -50,150 +50,8 @@
   <p class="mt-2">© <span id="currentYear"></span> YourWeatherApp. All rights reserved.</p>
   <p class="mt-2">This software is licensed under the MIT License. You may obtain a copy of the License at <a href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a>.</p>
 </footer>
-
-<script>
-  document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-  const form = document.getElementById('weatherForm');
-
-  function fetchWeather(form) {
-    const query = buildQueryFromForm(form);
-    console.log(query);
-    const url = `http://localhost:3002/weatherfull?${query}`;
-
-    return fetch(url)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-              }
-              return response.json();
-            })
-            .catch(error => {
-              console.error('There was a problem with the fetch operation:', error);
-              throw error;
-            });
-  }
-
-  function hasChildren(element) {
-    return element.children.length > 0;
-  }
-
-  function removeAllChildren(element) {
-    while (element.firstChild) {
-      element.removeChild(element.firstChild);
-    }
-  }
-
-  form.addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    fetchWeather(form)
-            .then(data => {
-              const weatherElement = renderWeatherData(data);
-              const mainElement = document.querySelector('main');
-              if(hasChildren(mainElement)){
-                removeAllChildren(mainElement);
-              }
-              mainElement.appendChild(weatherElement);
-            })
-            .catch(error => {
-              console.error('Error fetching weather:', error);
-            })
-            .finally(() => {
-              form.reset();
-            });
-  });
-
-  const buildQueryFromForm = (form) => {
-    const params = new URLSearchParams();
-
-    if (form.elements['city_name'].value.trim()) {
-      params.append('city_name', form.elements['city_name'].value.trim());
-    }
-
-    if (form.elements['state_code'].value.trim()) {
-      params.append('state_code', form.elements['state_code'].value.trim());
-    }
-
-    if (form.elements['country_code'].value.trim()) {
-      params.append('country_code', form.elements['country_code'].value.trim());
-    }
-
-    const limit = parseInt(form.elements['limit'].value);
-    if (!isNaN(limit)) {
-      params.append('limit', limit.toString());
-    }
-
-    return params.toString();
-  };
-
-  function renderWeatherData(data) {
-    const container = document.createElement('div');
-    container.className = 'max-w-3xl p-6 bg-white shadow-lg rounded-lg';
-
-    // City and current weather
-    const cityWeather = document.createElement('div');
-    cityWeather.className = 'mb-6 mt-6';
-    cityWeather.innerHTML = `
-    <h1 class="text-3xl font-bold mb-2">${data.city.cityName}</h1>
-    <p class="text-xl">${data.weather.current.weather.description}</p>
-    <p class="text-4xl font-semibold">${data.weather.current.temperature.average.toFixed(1)}°C</p>
-    <p>Humidity: ${data.weather.current.humidity}% | Pressure: ${data.weather.current.pressure} hPa</p>
-    <p>Wind: ${data.weather.current.wind.speed} m/s, ${data.weather.current.wind.direction}°</p>
-  `;
-    container.appendChild(cityWeather);
-
-    // Daily forecast
-    const dailyForecast = document.createElement('div');
-    dailyForecast.className = 'mb-6';
-    dailyForecast.innerHTML = `
-    <h2 class="text-2xl font-bold mb-2">5-Day Forecast</h2>
-    <div class="grid grid-cols-5 gap-4">
-      ${data.weather.daily.slice(1).map(day => `
-        <div class="text-center">
-          <p class="font-semibold">${new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}</p>
-          <p>${day.weather.main}</p>
-          <p>${day.temperature.min.toFixed(1)}°C - ${day.temperature.max.toFixed(1)}°C</p>
-        </div>
-      `).join('')}
-    </div>
-  `;
-    container.appendChild(dailyForecast);
-
-    // Hourly forecast
-    const hourlyForecast = document.createElement('div');
-    hourlyForecast.innerHTML = `
-    <h2 class="text-2xl font-bold mb-2">Hourly Forecast</h2>
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="p-2">Time</th>
-            <th class="p-2">Weather</th>
-            <th class="p-2">Temp</th>
-            <th class="p-2">Humidity</th>
-            <th class="p-2">Wind</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${data.weather.hourly.slice(0,9).map(hour => `
-            <tr class="border-b">
-              <td class="p-2">${new Date(hour.date).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true })}</td>
-              <td class="p-2">${hour.weather.description}</td>
-              <td class="p-2">${hour.temperature.average.toFixed(1)}°C</td>
-              <td class="p-2">${hour.humidity}%</td>
-              <td class="p-2">${hour.wind.speed} m/s</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-    container.appendChild(hourlyForecast);
-
-    return container;
-  }
-</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/script.js"></script>
 </body>
 </html>
 
