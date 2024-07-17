@@ -6,9 +6,11 @@ import {HttpStatusCodes} from "../utils/http_status";
 import {buildPointObject} from "../utils/request_builders";
 
 const weatherFunctionHandler = async (
-    weatherFunction: (
-        coordinates: Point
-    ) => Promise<WeatherObject | WeatherObject[]>
+    weatherFunction: (coordinates: Point) => Promise<WeatherObject | WeatherObject[]| {
+        current: WeatherObject,
+        daily: WeatherObject[],
+        hourly: WeatherObject[]
+    }>
 ) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
