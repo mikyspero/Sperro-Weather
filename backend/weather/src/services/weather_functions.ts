@@ -10,6 +10,7 @@ import {WeatherObjectSchema} from "../models/weather_schemas";
 import {Point} from "../types/point";
 import {WebError} from "../utils/web_error";
 import {HttpStatusCodes} from "../utils/http_status";
+import {FullWeather} from "../types/full_weather";
 
 /**
  * Finds the most frequent weather type from an array of WeatherObject.
@@ -231,17 +232,15 @@ const switchWeather = (key: string) => {
     }
 };
 
+
+
 /**
  * Fetches and processes full weather data (current, daily, and hourly) for given coordinates.
  * @param {Point} coordinates - Location coordinates.
- * @returns {Promise<{current: WeatherObject, daily: WeatherObject[], hourly: WeatherObject[]}>}
+ * @returns {Promise<FullWeather>}
  *          Promise resolving to object containing current, daily, and hourly weather data.
  */
-const getFullWeather = async (coordinates: Point): Promise<{
-    current: WeatherObject,
-    daily: WeatherObject[],
-    hourly: WeatherObject[]
-}> => {
+const getFullWeather = async (coordinates: Point): Promise<FullWeather> => {
     // Fetch current weather
     const currentWeather = await getCurrentWeather(coordinates);
     // Fetch hourly weather forecast

@@ -4,14 +4,10 @@ import {Point} from "../types/point";
 import {WeatherObject} from "../types/weather_object";
 import {HttpStatusCodes} from "../utils/http_status";
 import {buildPointObject} from "../utils/request_builders";
+import {FullWeather} from "../types/full_weather";
 
 const weatherFunctionHandler = async (
-    weatherFunction: (coordinates: Point) => Promise<WeatherObject | WeatherObject[]| {
-        current: WeatherObject,
-        daily: WeatherObject[],
-        hourly: WeatherObject[]
-    }>
-) => {
+    weatherFunction: (coordinates: Point) => Promise<WeatherObject | WeatherObject[]| FullWeather>) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             //Extract latitude and longitude from the query string they have already been validated

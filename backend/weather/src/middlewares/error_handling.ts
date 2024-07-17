@@ -1,12 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { WebError } from "../utils/web_error";
 
-const errorHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof WebError) {
     // Handle known WebError types
     const statusCode = err.status || 500; // Default to 500 Internal Server Error if statusCode is not set
