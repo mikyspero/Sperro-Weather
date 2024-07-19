@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
+    networks:
+      frontend_network:
+        ipv4_address: 192.168.1.10
+      frontend_gateway_network:
+        ipv4_address: 192.168.2.10
+
+  gateway:
+    build:
+      context: ./backend/gateway
+    ports:
+      - "3002:3002"
+    networks:
+      frontend_gateway_network:
+        ipv4_address: 192.168.2.20
+      backend_network:
+        ipv4_address: 192.168.3.10
+
+  weather:
+    build:
+      context: ./backend/weather
+    ports:
+      - "3000:3000"
+    networks:
+      backend_network:
+        ipv4_address: 192.168.3.20
+      external_network:
+        ipv4_address: 192.168.4.10
+
+  geolocation:
+    build:
+      context: ./backend/geolocation
+    ports:
+      - "3001:3001"
+    networks:
+      backend_network:
+        ipv4_address: 192.168.3.30
+      external_network:
+        ipv4_address: 192.168.4.20
+
+networks:
+  frontend_network:
+    name: frontend_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+  frontend_gateway_network:
+    name: frontend_gateway_network
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 192.168.2.0/24
+  backend_network:
+    name: backend_network
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 192.168.3.0/24
+  external_network:
+    name: external_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.4.0/24
