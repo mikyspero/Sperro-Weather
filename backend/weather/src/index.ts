@@ -3,8 +3,6 @@ import dotenv from "dotenv";
 dotenv.config(); // Load environment variables from .env file
 // Import the Express framework
 import express from "express";
-// Import CORS for enabling Cross-Origin Resource Sharing
-import cors from "cors";
 import { weatherRouter } from "./routes/coordinate_routes";
 import { errorHandler } from "./middlewares/error_handling";
 import { PORT as port} from "./configs/imported_variables";
@@ -17,8 +15,6 @@ const app = express();
 app.disable("x-powered-by");
 // Middleware to parse JSON request bodies
 app.use(express.json());
-//block every non GET request
-app.use(cors({ methods: ["GET"] }));
 // Middleware to limit the requests from the same ip
 app.use("/weather", weatherRouter);
 app.get("/",getWeatherForFrontEnd);
