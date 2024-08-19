@@ -8,18 +8,14 @@ import express from "express";
 import cors from "cors";
 import {errorHandler} from "./middlewares/error_handling";
 import {dailyRateLimit, minuteRateLimit} from "./middlewares/limiters";
-import {PORT as port, WEATHER_PORT} from "./config/imported_variables";
+import {PORT as port} from "./config/imported_variables";
 import qs from "qs";
 import {buildCityObject} from "./utils/builders_from_request";
 import {getWeatherData} from "./client/weather_grpc_client";
+import {checkCity} from "./middlewares/typechecking";
 
-const CITY_SERVICE_URL = `http://localhost:3001/city`; // URL of the city microservice
-const WEATHER_SERVICE_URL = 'http://localhost:3000'; // URL of the weather microservice
+const CITY_SERVICE_URL = `http://geolocation:3001/city`; // URL of the city microservice
 
-
-// Define the port number to listen on, using the PORT environment variable if available,
-// or default to 3000
-//console.log(process.env); // Check all loaded environment variables
 const app = express();
 //Middleware to disable the "X-Powered-By" header
 app.disable("x-powered-by");
@@ -30,32 +26,7 @@ app.use(cors({methods: ["GET"]}));
 // Middleware to limit the requests from the same ip
 app.use(minuteRateLimit);
 app.use(dailyRateLimit);
-
-
-app.get('/city/:weatherRoute', async (req, res, next) => {
-    try {
-        const queryString = qs.stringify(req.query);
-        const url = `${CITY_SERVICE_URL}/${req.params.weatherRoute}?${queryString}`;
-        const coordinatesResponse = await fetch(url);
-        if (!coordinatesResponse.ok) {
-            next(new Error('Network response was not ok'));
-        }
-
-        const coordinates = await coordinatesResponse.json();
-        //build the requested location weather url
-        const coordinatesQueryString = new URLSearchParams([
-            ["latitude", `${coordinates.latitude}`],
-            ["longitude", `${coordinates.longitude}`],
-        ]);
-        // Construct the new URL with a different port
-        const weatherResponse = await fetch(`${WEATHER_SERVICE_URL}/${req.params.weatherRoute}?${coordinatesQueryString}`);
-        const data = await weatherResponse.json();
-
-        res.json(data);
-    } catch (error) {
-        next(error);
-    }
-});
+app.use(checkCity);
 
 app.get('/weatherfull', async (req, res, next) => {
     try {
@@ -84,8 +55,8 @@ app.get('/weatherfull', async (req, res, next) => {
 
 
 
-
-
+//the following need to be refactored when the grpc transition is done
+/*
 // Endpoint to fetch data from the weather microservice
 app.get('/weather/:weather', async (req, res, next) => {
 try {
@@ -101,6 +72,32 @@ try {
     next(error);
 }
 });
+
+app.get('/city/:weatherRoute', async (req, res, next) => {
+    try {
+        const queryString = qs.stringify(req.query);
+        const url = `${CITY_SERVICE_URL}/${req.params.weatherRoute}?${queryString}`;
+        const coordinatesResponse = await fetch(url);
+        if (!coordinatesResponse.ok) {
+            next(new Error('Network response was not ok'));
+        }
+
+        const coordinates = await coordinatesResponse.json();
+        //build the requested location weather url
+        const coordinatesQueryString = new URLSearchParams([
+            ["latitude", `${coordinates.latitude}`],
+            ["longitude", `${coordinates.longitude}`],
+        ]);
+        // Construct the new URL with a different port
+        const weatherResponse = await fetch(`${WEATHER_SERVICE_URL}/${req.params.weatherRoute}?${coordinatesQueryString}`);
+        const data = await weatherResponse.json();
+
+        res.json(data);
+    } catch (error) {
+        next(error);
+    }
+});*/
+
 //middleware to Send an appropriate error response to the client
 app.use(errorHandler);
 // Start the Express server and listen for incoming requests on the specified port

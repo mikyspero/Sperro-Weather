@@ -1,10 +1,13 @@
 import path from "path";
-import { credentials, loadPackageDefinition } from "@grpc/grpc-js";
-import { loadSync } from "@grpc/proto-loader";
+import * as grpc from "@grpc/grpc-js";
+import * as protoLoader from "@grpc/proto-loader";
 import { Point } from "../types/point";
+import { WEATHER_PORT } from "../config/imported_variables";
+import {WebError} from "../utils/web_error";
+import {HttpStatusCodes} from "../utils/http_status";
 
 const PROTO_PATH = path.join(__dirname, '../../proto/weather-service.proto');
-const packageDefinition = loadSync(PROTO_PATH, {
+const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
     keepCase: true,
     longs: String,
     enums: String,
@@ -12,13 +15,15 @@ const packageDefinition = loadSync(PROTO_PATH, {
     oneofs: true
 });
 
-const weatherProto: any = loadPackageDefinition(packageDefinition);
+const weatherProto = grpc.loadPackageDefinition(packageDefinition) as any;
+
+const WeatherService = weatherProto.WeatherService;
 
 interface WeatherClient {
     getFullWeather(point: Point, callback: (error: Error | null, response: any) => void): void;
 }
 
-const client = new weatherProto.GetWeather('localhost:50051', credentials.createInsecure()) as WeatherClient;
+const client = new WeatherService('weather:3000', grpc.credentials.createInsecure()) as WeatherClient;
 
 export async function getWeatherData(latitude: number, longitude: number): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -27,7 +32,9 @@ export async function getWeatherData(latitude: number, longitude: number): Promi
         client.getFullWeather(point, (error, response) => {
             if (error) {
                 console.error('gRPC Error:', error);
-                reject(error);
+                // Transform the gRPC error into a WebError
+                const webError = WebError.buildErrorFromGrpc(error);
+                reject(webError);
             } else {
                 resolve(response);
             }
