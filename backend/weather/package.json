@@ -7,11 +7,15 @@
     "start": "node dist/index.js",
     "devstart": "nodemon dist/index.js",
     "build": "npx tsc",
+    "grpc-start": " node dist/server/grpc_server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Michele Speroni",
   "license": "MIT",
   "dependencies": {
+    "@bufbuild/buf": "^1.37.0",
+    "@grpc/grpc-js": "^1.11.1",
+    "@grpc/proto-loader": "^0.7.13",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
@@ -22,6 +26,8 @@
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.21",
+    "@types/google-protobuf": "^3.15.12",
+    "@types/node": "^22.4.0",
     "node-ts": "^6.0.1",
     "nodemon": "^3.1.0",
     "typescript": "^5.4.5"

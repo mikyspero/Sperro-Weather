@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+import "point.proto";
+
+import "weather.proto";
+
+import "weather-list.proto";
+
+service WeatherService {
+  // Note: In future implementations, these might be changed to use streams
+  // for improved performance with large datasets.
+  rpc GetCurrentWeather (Point) returns (WeatherObject) {}
+  rpc GetHourlyWeather (Point) returns (WeatherObjectList) {}
+  rpc GetDailyWeather (Point) returns (WeatherObjectList) {}
+  rpc GetFullWeather (Point) returns (FullWeather) {}
+}

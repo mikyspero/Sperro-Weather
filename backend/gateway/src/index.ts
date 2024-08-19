@@ -11,6 +11,7 @@ import {dailyRateLimit, minuteRateLimit} from "./middlewares/limiters";
 import {PORT as port, WEATHER_PORT} from "./config/imported_variables";
 import qs from "qs";
 import {buildCityObject} from "./utils/builders_from_request";
+import {getWeatherData} from "./client/weather_grpc_client";
 
 const CITY_SERVICE_URL = `http://localhost:3001/city`; // URL of the city microservice
 const WEATHER_SERVICE_URL = 'http://localhost:3000'; // URL of the weather microservice
@@ -35,7 +36,6 @@ app.get('/city/:weatherRoute', async (req, res, next) => {
     try {
         const queryString = qs.stringify(req.query);
         const url = `${CITY_SERVICE_URL}/${req.params.weatherRoute}?${queryString}`;
-
         const coordinatesResponse = await fetch(url);
         if (!coordinatesResponse.ok) {
             next(new Error('Network response was not ok'));
@@ -65,18 +65,11 @@ app.get('/weatherfull', async (req, res, next) => {
         const coordinatesResponse = await fetch(url);
         if (!coordinatesResponse.ok) {
             next(new Error('Network response was not ok'));
+            return;
         }
         const requestedCity = buildCityObject(req);
         const coordinates = await coordinatesResponse.json();
-        //build the requested location weather url
-        const coordinatesQueryString = new URLSearchParams([
-            ["latitude", `${coordinates.latitude}`],
-            ["longitude", `${coordinates.longitude}`],
-        ]);
-        console.log(`${WEATHER_SERVICE_URL}/?${coordinatesQueryString}`)
-        // Construct the new URL with a different port
-        const weatherResponse = await fetch(`${WEATHER_SERVICE_URL}/?${coordinatesQueryString}`);
-        const data = await weatherResponse.json();
+        const data = await getWeatherData(coordinates.latitude,coordinates.longitude);
         const tbr ={
             city:requestedCity,
             weather:data,

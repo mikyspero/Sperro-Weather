@@ -262,4 +262,4 @@ const getFullWeather = async (coordinates: Point): Promise<FullWeather> => {
 };
 
 
-export {switchWeather,getFullWeather};
+export {switchWeather,getFullWeather, getCurrentWeather, getHourlyWeather, getDailyWeather};

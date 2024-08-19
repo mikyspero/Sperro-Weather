@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "point.proto";
+
+import "weather.proto";
+
+
+service GetWeather {
+  rpc GetFullWeather (Point) returns (FullWeather) {}
+}

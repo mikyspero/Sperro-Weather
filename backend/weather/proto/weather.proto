@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+message WeatherObject {
+  // Date of the weather data
+  string date = 1;
+
+  // Weather details
+  message Weather {
+    string main = 1;
+    string description = 2; // Optional
+  }
+  Weather weather = 2;
+
+  // Temperature details
+  message Temperature {
+    double current = 1; // Optional
+    double average = 2; // Optional
+    double feelslike = 3; // Optional
+    double min = 4;
+    double max = 5;
+  }
+  Temperature temperature = 3;
+
+  // Humidity (optional)
+  double humidity = 4;
+
+  // Pressure (optional)
+  double pressure = 5;
+
+  // Wind details (optional)
+  message Wind {
+    double speed = 1;
+    double direction = 2;
+  }
+  Wind wind = 6;
+}
+
+
+message FullWeather {
+  WeatherObject current = 1;
+  repeated WeatherObject daily = 2;
+  repeated WeatherObject hourly = 3;
+}

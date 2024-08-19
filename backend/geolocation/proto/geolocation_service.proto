@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "city.proto";
+
+import "point.proto";
+
+service Geolocation {
+  rpc GetCoordinates (CityRequest) returns (Point) {}
+}

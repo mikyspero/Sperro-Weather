@@ -1,26 +1,26 @@
-// Load environment variables from a .env file into process.env
 import dotenv from "dotenv";
 dotenv.config(); // Load environment variables from .env file
-// Import the Express framework
-import express from "express";
-import { weatherRouter } from "./routes/coordinate_routes";
-import { errorHandler } from "./middlewares/error_handling";
-import { PORT as port} from "./configs/imported_variables";
-import {getWeather, getWeatherForFrontEnd} from "./controllers/weather_controller";
-// Define the port number to listen on, using the PORT environment variable if available,
-// or default to 3000
-//console.log(process.env); // Check all loaded environment variables
-const app = express();
-//Middleware to disable the "X-Powered-By" header
-app.disable("x-powered-by");
-// Middleware to parse JSON request bodies
-app.use(express.json());
-// Middleware to limit the requests from the same ip
-app.use("/weather", weatherRouter);
-app.get("/",getWeatherForFrontEnd);
-//middleware to Send an appropriate error response to the client
-app.use(errorHandler);
-// Start the Express server and listen for incoming requests on the specified port
-app.listen(port, () => {
-  console.log(`listening on port ${port}`);
+
+import { ServerCredentials } from "@grpc/grpc-js";
+import { createServer } from "./server/grpc_server";
+import { PORT} from "./configs/imported_variables";
+
+const server = createServer();
+
+const address = `0.0.0.0:${PORT}`;
+server.bindAsync(address, ServerCredentials.createInsecure(), (err: Error | null, PORT: number) => {
+  if (err) {
+    console.error(`Failed to start server: ${err.message}`);
+    process.exit(1);  // Exit the process with an error code
+  }
+  console.log(`Server running at ${address}`);
 });
+
+// Graceful shutdown
+process.on('SIGINT', () => {
+  console.log('Shutting down gRPC server');
+  server.forceShutdown();
+  process.exit(0);
+});
+
+
