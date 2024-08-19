@@ -1,2 +1,2 @@
 # Sperro-Weather
-A microservice based weather app to learn the basis of web development it's based on OpenWeatherMapApi. It focuses on asynchronous operations and data processing
+A microservice based weather app to learn the basis of web development it's based on OpenWeatherMapApi. It focuses on asynchronous operations and data processing, it implements three microservices a Rest API gateway, a geolocation service and a weather forecast one, the latter is already gRPC based, the geolocation one is being refactored from being Rest based to also being gRPC based.
