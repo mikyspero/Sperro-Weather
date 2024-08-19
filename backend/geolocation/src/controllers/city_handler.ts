@@ -3,8 +3,6 @@ import { getCoordinates } from "../services/location";
 import { Request, Response, NextFunction } from "express";
 import { City } from "../types/city";
 import { buildCityObject } from "../utils/request_builders";
-import {WEATHER_PORT} from "../configs/imported_variables";
-
 /**
  * Handles requests to the city controller.
  * Builds a URL to redirect based on city information.

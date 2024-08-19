@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+message Point {
+  // Latitude in degrees. Must be in the range [-90.0, +90.0].
+  double latitude = 1;
+
+  // Longitude in degrees. Must be in the range [-180.0, +180.0].
+  double longitude = 2;
+}
