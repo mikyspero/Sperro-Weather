@@ -24,9 +24,6 @@ WORKDIR /usr/share/nginx/html
 # Copy built assets from build stage
 COPY --from=build /app/css/styles.css ./css/
 COPY --from=build /app/index.html .
-COPY --from=build /app/js ./js
-COPY --from=build /app/images ./images
-
 # Copy Nginx configuration if needed
 # COPY nginx.conf /etc/nginx/nginx.conf
 

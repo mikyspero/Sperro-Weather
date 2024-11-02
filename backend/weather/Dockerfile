@@ -40,4 +40,4 @@ COPY --from=build /app/.env ./.env
 EXPOSE 3000
 
 # Command to run your application
-CMD ["node", "dist/index.js"]
+ENTRYPOINT ["node", "dist/index.js"]
